@@ -7,6 +7,6 @@ This mobile app is for SpaceFarmers who prefer the mobile experience. This app i
 ## Setup development environment
 
 - Install [Node 12.0 LTS](https://nodejs.org/en/download/) or greater
-- npm install -g expo-cli
+- `npm install -g expo-cli`
 - clone this project
 - Inside the project, run: `npm start`
