@@ -18,9 +18,12 @@ export default function DashboardScreen() {
 
   const getFarms = async () => {
     try {
-     const response = await fetch('https://spacefarmers.io/api/farmers');
-     const json = await response.json();
-     setData(json.data);
+      let response = await fetch('https://spacefarmers.io/api/farmers/904b6b9dcd7a7f7964bc001d1fa20371a9f4914de0501226a8223e472cc0b00a');
+      let json = await response.json();
+      setData([...data, json.data]);
+      response = await fetch('https://spacefarmers.io/api/farmers/af160f9391c716415b28a38b85024c0809a3a1b64c51ee4cb6e301156aa0380f');
+      json = await response.json();
+      setData([...data, json.data]);
    } catch (error) {
      console.error(error);
    } finally {

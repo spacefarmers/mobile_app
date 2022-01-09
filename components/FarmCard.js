@@ -146,7 +146,7 @@ export default class FarmCard extends React.Component {
               Effort
             </Text>
             <Heading size="md" ml="-1">
-              0.00%
+              -.--%
             </Heading>
           </Box>
         </Flex>
