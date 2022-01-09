@@ -53,7 +53,7 @@ export default class FarmCard extends React.Component {
             px="3"
             py="1.5"
           >
-            Farm name
+            {this.props.farm.attributes.farmer_name}
           </Center>
         </Box>
         <Flex
@@ -80,7 +80,7 @@ export default class FarmCard extends React.Component {
               Size
             </Text>
             <Heading size="md" ml="-1">
-              100.0 TiB
+              {this.props.farm.attributes.tib_24h} TiB
             </Heading>
           </Box>
           <Box width="50%" px="4">
@@ -99,7 +99,7 @@ export default class FarmCard extends React.Component {
               Points (24H)
             </Text>
             <Heading size="md" ml="-1">
-              1.234
+              {this.props.farm.attributes.points_24h}
             </Heading>
           </Box>
         </Flex>
@@ -124,10 +124,10 @@ export default class FarmCard extends React.Component {
               ml="-0.5"
               mt="-1"
             >
-              Effort
+              Share
             </Text>
             <Heading size="md" ml="-1">
-              51.8%
+              {this.props.farm.attributes.ratio_24h}%
             </Heading>
           </Box>
           <Box width="50%" px="4">
@@ -143,10 +143,10 @@ export default class FarmCard extends React.Component {
               ml="-0.5"
               mt="-1"
             >
-              ETW
+              Effort
             </Text>
             <Heading size="md" ml="-1">
-              1 year
+              0.00%
             </Heading>
           </Box>
         </Flex>
