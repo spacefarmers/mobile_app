@@ -18,7 +18,7 @@ export default function App() {
         <Drawer.Navigator 
           drawerType="front"
           initialRouteName="Dashboard"
-          drawerContentOptions={{
+          screenOptions={{
             activeTintColor: '#e91e63',
             itemStyle: { marginVertical: 10 },
           }}

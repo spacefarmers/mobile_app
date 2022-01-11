@@ -1,35 +1,38 @@
 import React, { useState, useEffect } from "react"
 import {
+  Box,
   Center,
   View,
   FlatList,
   Text,
+  Heading,
+  Flex,
+  Icon,
+  Button
 } from "native-base"
 import FarmCard from "../components/FarmCard"
+import FarmAddModal from "../components/FarmAddModal"
 import { ActivityIndicator } from "react-native";
+import { Ionicons } from '@expo/vector-icons';
 
 export default function DashboardScreen() {
-  const [isLoading, setLoading] = useState(true);
-  const [data, setData] = useState([]);
+  const [showFarmAddModal, setFarmAddModal] = useState(false);
+  const [farmSizes, addSize] = useState({});
+  const [totalPoints, setTotalPoints] = useState(0);
+  const [farmIds, setFarmIds] = useState(['904b6b9dcd7a7f7964bc001d1fa20371a9f4914de0501226a8223e472cc0b00a']);
+  // const [farmIds, setFarmIds] = useState(['f7e4ca9cacd0f8e500ece3bb4dddeffe1530e5a989ad90c1298380ffa91578e2']);
 
-  useEffect(() => {
-    getFarms();
-  }, []);
+  const unique = (value, index, self) => {
+    return self.indexOf(value) === index
+  }
 
-  const getFarms = async () => {
-    try {
-      let response = await fetch('https://spacefarmers.io/api/farmers/904b6b9dcd7a7f7964bc001d1fa20371a9f4914de0501226a8223e472cc0b00a');
-      let json = await response.json();
-      setData([...data, json.data]);
-      response = await fetch('https://spacefarmers.io/api/farmers/af160f9391c716415b28a38b85024c0809a3a1b64c51ee4cb6e301156aa0380f');
-      json = await response.json();
-      setData([...data, json.data]);
-   } catch (error) {
-     console.error(error);
-   } finally {
-     setLoading(false);
-   }
- }
+  const addPoints = async (points) => {
+    setTotalPoints((totalPoints) => totalPoints + points);
+  };
+
+  const addFarm = (id) => {
+    setFarmIds(ids => ids.concat(id).filter(unique))
+  }
 
   const renderItem = ({ farm }) => (
     <Center>
@@ -38,19 +41,99 @@ export default function DashboardScreen() {
   );
 
   return (
-    <View>
-      {isLoading ? <ActivityIndicator /> : (
+    <View style={{ flex: 1 }}>
+      <FarmAddModal addFarm={addFarm} showFarmAddModal={showFarmAddModal} setShowModal={setFarmAddModal} />
+      <Center pt="4">
+        <Box
+          maxW="80"
+          rounded="lg"
+          overflow="hidden"
+          borderColor="coolGray.200"
+          borderWidth="1"
+          mb="3"
+          _dark={{
+            borderColor: "coolGray.600",
+            backgroundColor: "gray.700",
+          }}
+          _web={{
+            shadow: 2,
+            borderWidth: 0,
+          }}
+          _light={{
+            backgroundColor: "gray.50",
+          }}
+        >
+          <Flex
+            direction="row"
+            mb="2.5"
+            mt="1.5"
+            _text={{
+              color: "coolGray.800",
+            }}
+          >
+            <Box width="50%" px="4">
+            <Text
+                fontSize="xs"
+                _light={{
+                  color: "blue.800",
+                }}
+                _dark={{
+                  color: "blue.600",
+                }}
+                fontWeight="500"
+                ml="-0.5"
+                mt="-1"
+              >
+                Total size
+              </Text>
+              <Heading size="md" ml="-1">
+                {Object.values(farmSizes).reduce((a, b) => a + b, 0)} TiB
+              </Heading>
+            </Box>
+            <Box width="50%" px="4">
+            <Text
+                fontSize="xs"
+                _light={{
+                  color: "blue.800",
+                }}
+                _dark={{
+                  color: "blue.600",
+                }}
+                fontWeight="500"
+                ml="-0.5"
+                mt="-1"
+              >
+                Total points (24H)
+              </Text>
+              <Heading size="md" ml="-1">
+                {totalPoints}
+              </Heading>
+            </Box>
+          </Flex>
+        </Box>
+      </Center>
         <FlatList
           pt="4"
-          data={data}
-          renderItem={({ item }) => (
+          data={farmIds}
+          renderItem={({ item, index }) => (
             <Center>
-              <FarmCard farm={item} />
+              <FarmCard farmId={item} index={index} addSize={addSize} addPoints={addPoints} />
             </Center>
           )}
-          keyExtractor={({ id }, index) => id}
+          ListFooterComponent={() => (
+            <Center pt="4" pb="10">
+              <Button
+                colorScheme="blue"
+                variant="outline"
+                leftIcon={<Icon as={Ionicons} name="add-outline" size="sm" />}
+                onPress={() => { setFarmAddModal(true); }}
+              >
+                Add farm
+              </Button>
+            </Center>
+          )}
+          keyExtractor={({ id }, index) => index}
         />
-      )}
     </View>
   )
 }
