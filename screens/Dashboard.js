@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react"
+import React, { useState } from "react"
 import {
   Box,
   Center,
@@ -8,11 +8,10 @@ import {
   Heading,
   Flex,
   Icon,
-  Button
+  Button,
 } from "native-base"
 import FarmCard from "../components/FarmCard"
 import FarmAddModal from "../components/FarmAddModal"
-import { ActivityIndicator } from "react-native";
 import { Ionicons } from '@expo/vector-icons';
 
 export default function DashboardScreen() {
@@ -31,7 +30,13 @@ export default function DashboardScreen() {
   };
 
   const addFarm = (id) => {
-    setFarmIds(ids => ids.concat(id).filter(unique))
+    setFarmIds(ids => ids.concat(id).filter(unique));
+  }
+
+  const removeFarm = (index) => {
+    var newIds = [...farmIds];
+    newIds.splice(index, 1);
+    setFarmIds(newIds);
   }
 
   const renderItem = ({ farm }) => (
@@ -42,7 +47,7 @@ export default function DashboardScreen() {
 
   return (
     <View style={{ flex: 1 }}>
-      <FarmAddModal addFarm={addFarm} showFarmAddModal={showFarmAddModal} setShowModal={setFarmAddModal} />
+      <FarmAddModal addFarm={addFarm} showModal={showFarmAddModal} setShowModal={setFarmAddModal} />
       <Center pt="4">
         <Box
           maxW="80"
@@ -117,7 +122,7 @@ export default function DashboardScreen() {
           data={farmIds}
           renderItem={({ item, index }) => (
             <Center>
-              <FarmCard farmId={item} index={index} addSize={addSize} addPoints={addPoints} />
+              <FarmCard farmId={item} index={index} addSize={addSize} addPoints={addPoints} removeFarm={removeFarm} />
             </Center>
           )}
           ListFooterComponent={() => (

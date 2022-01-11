@@ -34,7 +34,7 @@ export default class FarmAddModal extends React.Component {
 
   render() {
     return(
-      <Modal isOpen={this.props.showFarmAddModal} onClose={() => this.props.setShowModal(false)}>
+      <Modal isOpen={this.props.showModal} onClose={() => this.props.setShowModal(false)}>
         <Modal.Content maxWidth="400px">
           <Modal.CloseButton />
           <Modal.Header>Add farm</Modal.Header>
