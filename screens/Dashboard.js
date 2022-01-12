@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 import {
   Box,
   Center,
@@ -13,27 +13,42 @@ import {
 import FarmCard from "../components/FarmCard"
 import FarmAddModal from "../components/FarmAddModal"
 import { Ionicons } from '@expo/vector-icons';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function DashboardScreen() {
   const [showFarmAddModal, setFarmAddModal] = useState(false);
-  const [farmSizes, addSize] = useState({});
-  const [totalPoints, setTotalPoints] = useState(0);
-  const [farmIds, setFarmIds] = useState(['904b6b9dcd7a7f7964bc001d1fa20371a9f4914de0501226a8223e472cc0b00a']);
-  // const [farmIds, setFarmIds] = useState(['f7e4ca9cacd0f8e500ece3bb4dddeffe1530e5a989ad90c1298380ffa91578e2']);
+  const [farmSizes, setFarmSize] = useState({});
+  const [farmPoints, setFarmPoints] = useState({});
+  const [lastRefresh, setLastRefresh] = useState(0);
+  const [farmIds, setFarmIds] = useState([]);
+
+  useEffect(() => {
+    async function getFarms() { 
+      farmsStored = await AsyncStorage.getItem('@farmIds');
+      farmArray = JSON.parse(farmsStored);
+      farmArray.forEach(addFarm);
+    }
+
+    getFarms();
+  }, []);
+
+  useEffect(() => {
+    async function storeFarms() { 
+      await AsyncStorage.setItem('@farmIds', JSON.stringify(farmIds));
+    }
+
+    storeFarms();
+  }, [farmIds]);
 
   const unique = (value, index, self) => {
     return self.indexOf(value) === index
   }
 
-  const addPoints = async (points) => {
-    setTotalPoints((totalPoints) => totalPoints + points);
-  };
-
-  const addFarm = (id) => {
+  const addFarm = async (id) => {
     setFarmIds(ids => ids.concat(id).filter(unique));
   }
 
-  const removeFarm = (index) => {
+  const removeFarm = async (index) => {
     var newIds = [...farmIds];
     newIds.splice(index, 1);
     setFarmIds(newIds);
@@ -92,7 +107,7 @@ export default function DashboardScreen() {
                 Total size
               </Text>
               <Heading size="md" ml="-1">
-                {Object.values(farmSizes).reduce((a, b) => a + b, 0)} TiB
+                {Math.round(Object.values(farmSizes).reduce((a, b) => a + b, 0) * 100) / 100} TiB
               </Heading>
             </Box>
             <Box width="50%" px="4">
@@ -111,7 +126,7 @@ export default function DashboardScreen() {
                 Total points (24H)
               </Text>
               <Heading size="md" ml="-1">
-                {totalPoints}
+                {Object.values(farmPoints).reduce((a, b) => a + b, 0)} TiB
               </Heading>
             </Box>
           </Flex>
@@ -120,9 +135,11 @@ export default function DashboardScreen() {
         <FlatList
           pt="4"
           data={farmIds}
+          onRefresh={() => setLastRefresh(lastRefresh + 1)}
+          refreshing={false}
           renderItem={({ item, index }) => (
             <Center>
-              <FarmCard farmId={item} index={index} addSize={addSize} addPoints={addPoints} removeFarm={removeFarm} />
+              <FarmCard farmId={item} index={index} addSize={setFarmSize} addPoints={setFarmPoints} removeFarm={removeFarm} lastRefresh={lastRefresh} />
             </Center>
           )}
           ListFooterComponent={() => (

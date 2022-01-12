@@ -24,7 +24,7 @@ export default class FarmAddModal extends React.Component {
     this.setState({ loading: true });
     const response = await fetch('https://spacefarmers.io/api/farmers/' + this.state.farmId);
     if (response.status === 200) {
-      this.props.addFarm(this.state.farmId);
+      await this.props.addFarm(this.state.farmId);
       this.props.setShowModal(false);
       this.setState(initialState);
     } else {

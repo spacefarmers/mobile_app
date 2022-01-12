@@ -17,12 +17,23 @@ export default class FarmCard extends React.Component {
   }
 
   async componentDidMount() {
+    await this.getFarm();
+  }
+
+  async componentDidUpdate(prevProps) {
+    if (prevProps.lastRefresh != this.props.lastRefresh) {
+      await this.getFarm();
+    }
+  }
+
+  async getFarm() {
     // const response = await fetch('http://192.168.89.116/api/farmers/' + this.props.farmId);
+    this.setState({loading: true});
     const response = await fetch('https://spacefarmers.io/api/farmers/' + this.props.farmId);
     const json = await response.json();
     this.farm = json.data;
     this.props.addSize(sizes => ({ ...sizes, [this.props.index]: this.farm.attributes.tib_24h}));
-    this.props.addPoints(this.farm.attributes.points_24h);
+    this.props.addPoints(points => ({ ...points, [this.props.index]: this.farm.attributes.points_24h}));
     this.setState({loading: false});
   }
 
@@ -32,7 +43,7 @@ export default class FarmCard extends React.Component {
 
   removeFarm() {
     this.props.addSize(sizes => ({ ...sizes, [this.props.index]: 0}));
-    this.props.addPoints(this.farm.attributes.points_24h * -1);
+    this.props.addPoints(points => ({ ...points, [this.props.index]: 0}));
     this.props.removeFarm(this.props.index);
     this.showRemoveModal(false);
   }
