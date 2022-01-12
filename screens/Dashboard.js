@@ -126,7 +126,7 @@ export default function DashboardScreen() {
                 Total points (24H)
               </Text>
               <Heading size="md" ml="-1">
-                {Object.values(farmPoints).reduce((a, b) => a + b, 0)} TiB
+                {Object.values(farmPoints).reduce((a, b) => a + b, 0)}
               </Heading>
             </Box>
           </Flex>
