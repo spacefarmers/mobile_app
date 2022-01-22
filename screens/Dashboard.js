@@ -123,7 +123,7 @@ export default function DashboardScreen() {
                 ml="-0.5"
                 mt="-1"
               >
-                Total points (24H)
+                Total points
               </Text>
               <Heading size="md" ml="-1">
                 {Object.values(farmPoints).reduce((a, b) => a + b, 0)}

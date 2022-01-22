@@ -121,10 +121,10 @@ export default class FarmCard extends React.Component {
                       ml="-0.5"
                       mt="-1"
                     >
-                      Size
+                      Size (TiB)
                     </Text>
                     <Heading size="md" ml="-1">
-                      {this.farm.attributes.tib_24h} TiB
+                      {this.farm.attributes.tib_24h}
                     </Heading>
                   </Box>
                   <Box width="50%" px="4">
