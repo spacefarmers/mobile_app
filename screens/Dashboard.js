@@ -24,8 +24,8 @@ export default function DashboardScreen() {
 
   useEffect(() => {
     async function getFarms() { 
-      farmsStored = await AsyncStorage.getItem('@farmIds');
-      farmArray = JSON.parse(farmsStored);
+      let farmsStored = await AsyncStorage.getItem('@farmIds');
+      let farmArray = JSON.parse(farmsStored);
       farmArray.forEach(addFarm);
     }
 
@@ -61,16 +61,16 @@ export default function DashboardScreen() {
   );
 
   return (
-    <View style={{ flex: 1 }}>
+    <View>
       <FarmAddModal addFarm={addFarm} showModal={showFarmAddModal} setShowModal={setFarmAddModal} />
       <Center pt="4">
         <Box
-          maxW="80"
+          w="90%"
+          maxW="400"
           rounded="lg"
           overflow="hidden"
           borderColor="coolGray.200"
           borderWidth="1"
-          mb="3"
           _dark={{
             borderColor: "coolGray.600",
             backgroundColor: "gray.700",
@@ -101,17 +101,15 @@ export default function DashboardScreen() {
                   color: "blue.600",
                 }}
                 fontWeight="500"
-                ml="-0.5"
-                mt="-1"
               >
                 Total size
               </Text>
-              <Heading size="md" ml="-1">
+              <Heading size="md">
                 {Math.round(Object.values(farmSizes).reduce((a, b) => a + b, 0) * 100) / 100} TiB
               </Heading>
             </Box>
             <Box width="50%" px="4">
-            <Text
+             <Text
                 fontSize="xs"
                 _light={{
                   color: "blue.800",
@@ -120,42 +118,42 @@ export default function DashboardScreen() {
                   color: "blue.600",
                 }}
                 fontWeight="500"
-                ml="-0.5"
-                mt="-1"
+                textAlign="right"
               >
                 Total points
               </Text>
-              <Heading size="md" ml="-1">
+              <Heading size="md" textAlign="right">
                 {Object.values(farmPoints).reduce((a, b) => a + b, 0)}
               </Heading>
             </Box>
           </Flex>
         </Box>
       </Center>
-        <FlatList
-          pt="4"
-          data={farmIds}
-          onRefresh={() => setLastRefresh(lastRefresh + 1)}
-          refreshing={false}
-          renderItem={({ item, index }) => (
-            <Center>
-              <FarmCard farmId={item} index={index} addSize={setFarmSize} addPoints={setFarmPoints} removeFarm={removeFarm} lastRefresh={lastRefresh} />
-            </Center>
-          )}
-          ListFooterComponent={() => (
-            <Center pt="4" pb="10">
-              <Button
-                colorScheme="blue"
-                variant="outline"
-                leftIcon={<Icon as={Ionicons} name="add-outline" size="sm" />}
-                onPress={() => { setFarmAddModal(true); }}
-              >
-                Add farm
-              </Button>
-            </Center>
-          )}
-          keyExtractor={({ id }, index) => index}
-        />
+      <FlatList
+        w="100%"
+        pt="3"
+        data={farmIds}
+        onRefresh={() => setLastRefresh(lastRefresh + 1)}
+        refreshing={false}
+        renderItem={({ item, index }) => (
+          <Center>
+            <FarmCard farmId={item} index={index} addSize={setFarmSize} addPoints={setFarmPoints} removeFarm={removeFarm} lastRefresh={lastRefresh} />
+          </Center>
+        )}
+        ListFooterComponent={() => (
+          <Center pt="4" pb="10">
+            <Button
+              colorScheme="blue"
+              variant="outline"
+              leftIcon={<Icon as={Ionicons} name="add-outline" size="sm" />}
+              onPress={() => { setFarmAddModal(true); }}
+            >
+              Add farm
+            </Button>
+          </Center>
+        )}
+        keyExtractor={({ id }, index) => index}
+      />
     </View>
   )
 }

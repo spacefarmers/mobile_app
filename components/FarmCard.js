@@ -50,11 +50,10 @@ export default class FarmCard extends React.Component {
 
   render() {
     return(
-      <>
+      <Box maxW="400" w="90%">
         <FarmOptionsModal showModal={this.state.showRemoveModal} setShowModal={this.showRemoveModal.bind(this)} removeFarm={this.removeFarm.bind(this)} />
         <TouchableOpacity onLongPress={() => this.showRemoveModal(true)}>
           <Box
-            maxW="80"
             rounded="lg"
             overflow="hidden"
             borderColor="coolGray.200"
@@ -77,7 +76,7 @@ export default class FarmCard extends React.Component {
                 <Box>
                   <AspectRatio w="100%" ratio={16 / 9}>
                     <Center>
-                      <Heading size="sm" ml="-1">
+                      <Heading size="sm">
                         TODO: Graph
                       </Heading>
                     </Center>
@@ -118,13 +117,11 @@ export default class FarmCard extends React.Component {
                         color: "blue.600",
                       }}
                       fontWeight="500"
-                      ml="-0.5"
-                      mt="-1"
                     >
-                      Size (TiB)
+                      Size
                     </Text>
-                    <Heading size="md" ml="-1">
-                      {this.farm.attributes.tib_24h}
+                    <Heading size="md">
+                      {this.farm.attributes.tib_24h} TiB
                     </Heading>
                   </Box>
                   <Box width="50%" px="4">
@@ -137,12 +134,11 @@ export default class FarmCard extends React.Component {
                         color: "blue.600",
                       }}
                       fontWeight="500"
-                      ml="-0.5"
-                      mt="-1"
+                      textAlign="right"
                     >
-                      Points (24H)
+                      Points
                     </Text>
-                    <Heading size="md" ml="-1">
+                    <Heading size="md" textAlign="right">
                       {this.farm.attributes.points_24h}
                     </Heading>
                   </Box>
@@ -165,12 +161,10 @@ export default class FarmCard extends React.Component {
                         color: "blue.600",
                       }}
                       fontWeight="500"
-                      ml="-0.5"
-                      mt="-1"
                     >
                       Share
                     </Text>
-                    <Heading size="md" ml="-1">
+                    <Heading size="md">
                       {this.farm.attributes.ratio_24h}%
                     </Heading>
                   </Box>
@@ -184,13 +178,12 @@ export default class FarmCard extends React.Component {
                         color: "blue.600",
                       }}
                       fontWeight="500"
-                      ml="-0.5"
-                      mt="-1"
+                      textAlign="right"
                     >
                       Effort
                     </Text>
-                    <Heading size="md" ml="-1">
-                    {this.farm.attributes.current_effort}%
+                    <Heading size="md" textAlign="right">
+                      {this.farm.attributes.current_effort}%
                     </Heading>
                   </Box>
                 </Flex>
@@ -198,7 +191,7 @@ export default class FarmCard extends React.Component {
             )}
           </Box>
         </TouchableOpacity>
-      </>
+      </Box>
     );
   }
 }
