@@ -2,18 +2,30 @@ import React from 'react';
 import {
   Box,
   Text,
-  AspectRatio,
   Center,
   Heading,
   Flex,
+  Icon,
+  HStack,
 } from "native-base";
+import { BarChart } from "react-native-chart-kit";
+import { Dimensions } from "react-native";
 import { TouchableOpacity } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 import FarmOptionsModal from "../components/FarmOptionsModal"
 
 export default class FarmCard extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { loading: true, showRemoveModal: false };
+    this.graphPointsData = {
+      labels: [],
+      datasets: [
+        {
+          data: []
+        }
+      ]
+    };
+    this.state = { loading: true, graphLoading: true, showRemoveModal: false, currentGraph: 'points' };
   }
 
   async componentDidMount() {
@@ -26,15 +38,31 @@ export default class FarmCard extends React.Component {
     }
   }
 
+  async getFarmGraph() {
+    const response = await fetch('https://spacefarmers.io/api/graphs/farmer/points/' + this.props.farmId);
+    const data = await response.json();
+    data.reverse();
+    this.graphPointsData.datasets[0].data = data.slice(-72).map(x => x['value'] * 50);
+    this.graphPointsData.labels = data.slice(-72).map(x => {
+      const date = new Date(x['timestamp'] * 1000);
+      const hour = date.getHours()
+      if (hour == 0) {
+        return date.getDate() + "/" + date.getMonth() + 1
+      }
+      return ""
+    });
+    this.setState({graphLoading: false});
+  }
+
   async getFarm() {
-    // const response = await fetch('http://192.168.89.116/api/farmers/' + this.props.farmId);
-    this.setState({loading: true});
+    this.setState({loading: true, graphLoading: true});
     const response = await fetch('https://spacefarmers.io/api/farmers/' + this.props.farmId);
     const json = await response.json();
     this.farm = json.data;
     this.props.addSize(sizes => ({ ...sizes, [this.props.index]: this.farm.attributes.tib_24h}));
     this.props.addPoints(points => ({ ...points, [this.props.index]: this.farm.attributes.points_24h}));
     this.setState({loading: false});
+    this.getFarmGraph();
   }
 
   showRemoveModal(show = false) {
@@ -52,7 +80,7 @@ export default class FarmCard extends React.Component {
     return(
       <Box maxW="400" w="90%">
         <FarmOptionsModal showModal={this.state.showRemoveModal} setShowModal={this.showRemoveModal.bind(this)} removeFarm={this.removeFarm.bind(this)} />
-        <TouchableOpacity onLongPress={() => this.showRemoveModal(true)}>
+        <TouchableOpacity delayPressIn="300" delayLongPress="300" onLongPress={() => this.showRemoveModal(true)}>
           <Box
             rounded="lg"
             overflow="hidden"
@@ -74,13 +102,42 @@ export default class FarmCard extends React.Component {
             {this.state.loading ? "LOADING" : (
               <Box>
                 <Box>
-                  <AspectRatio w="100%" ratio={16 / 9}>
                     <Center>
-                      <Heading size="sm">
-                        TODO: Graph
-                      </Heading>
+                      <HStack space={2} mt="1.5">
+                        <Icon as={Ionicons} name="chevron-back-outline" size="sm" />
+                        <Text>Points</Text>
+                        <Icon as={Ionicons} name="chevron-forward-outline" size="sm" />
+                      </HStack>
                     </Center>
-                  </AspectRatio>
+                    <Center>
+                      {this.state.graphLoading ? "LOADING" : (
+                        <BarChart
+                          data={this.graphPointsData}
+                          width={Math.min(400, Dimensions.get("window").width * 0.85)}
+                          height={250}
+                          yAxisInterval={10} // optional, defaults to 1
+                          fromZero={true}
+                          xLabelsOffset={-10}
+                          chartConfig={{
+                            backgroundColor: "#fafafa",
+                            backgroundGradientFrom: "#fafafa",
+                            backgroundGradientTo: "#fafafa",
+                            color: (opacity = 1) => `rgba(0, 0, 255, ${opacity})`,
+                            labelColor: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
+                            strokeWidth: 2, // optional, default 3
+                            barPercentage: 0.1,
+                            decimalPlaces: 0,
+                          }}
+                          bezier
+                          style={{
+                            marginTop: 10,
+                            marginBottom: -10,
+                            marginLeft: -40,
+                            borderRadius: 8
+                          }}
+                        />
+                      )}
+                    </Center>
                   <Center
                     bg="blue.800"
                     _dark={{
@@ -102,7 +159,6 @@ export default class FarmCard extends React.Component {
                 <Flex
                   direction="row"
                   mb="2.5"
-                  mt="1.5"
                   _text={{
                     color: "coolGray.800",
                   }}

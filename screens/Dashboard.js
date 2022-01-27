@@ -141,10 +141,9 @@ export default function DashboardScreen() {
           </Center>
         )}
         ListFooterComponent={() => (
-          <Center pt="4" pb="10">
+          <Center pt="4" pb="100">
             <Button
-              colorScheme="blue"
-              variant="outline"
+              colorScheme="darkBlue"
               leftIcon={<Icon as={Ionicons} name="add-outline" size="sm" />}
               onPress={() => { setFarmAddModal(true); }}
             >
