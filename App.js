@@ -17,6 +17,7 @@ import {
   HStack,
   Divider,
   Icon,
+  Box
  } from "native-base";
 
 const Drawer = createDrawerNavigator();
@@ -25,8 +26,42 @@ const getIcon = (screenName) => {
   switch (screenName) {
     case "Dashboard":
       return "view-dashboard";
+    case "Notifications":
+      return "bell";
+    case "Farmers":
+      return "tractor";
     case "Blocks":
       return "variable-box";
+    case "Pool status":
+      return "chart-bar";
+    default:
+      return undefined;
+  }
+};
+
+let currentLabel = '';
+
+const getUnusedLabel = (screenName) => {
+  const label = getLabel(screenName)
+  if (label == currentLabel) {
+    return undefined;
+  }
+  currentLabel = label;
+  return label;
+}
+
+const getLabel = (screenName) => {
+  switch (screenName) {
+    case "Dashboard":
+      return "Personal";
+    case "Notifications":
+      return "Personal";
+    case "Farmers":
+      return "Pool";
+    case "Blocks":
+      return "Pool";
+    case "Pool status":
+      return "Pool";
     default:
       return undefined;
   }
@@ -39,11 +74,18 @@ function CustomDrawerContent(props) {
         <Center>
           <Image source={require('./assets/logo_light.png')} alt="SpaceFarmers.io" size={"sm"} style={{ width: 250 }} resizeMode={"contain"} />
         </Center>
-        <VStack divider={<Divider />} space="4">
-          <VStack space="3">
-            {props.state.routeNames.map((name, index) => (
+        <VStack>
+          {props.state.routeNames.map((name, index) => (
+            <Box key={name}>
+              { getUnusedLabel(name) != undefined ? (
+                <Box>
+                  <Divider />
+                  <Text fontWeight="500" fontSize="14" px="5" py="3" color="gray.500">
+                    { getLabel(name) }
+                  </Text>
+                </Box>
+              ) : ''}
               <Pressable
-                key={name}
                 px="5"
                 py="3"
                 rounded="md"
@@ -59,7 +101,7 @@ function CustomDrawerContent(props) {
                 <HStack space="7" alignItems="center">
                   <Icon
                     color={
-                      index === props.state.index ? "primary.500" : "gray.500"
+                      index === props.state.index ? "#6a5c6d" : "gray.500"
                     }
                     size="5"
                     as={<MaterialCommunityIcons name={getIcon(name)} />}
@@ -67,15 +109,15 @@ function CustomDrawerContent(props) {
                   <Text
                     fontWeight="500"
                     color={
-                      index === props.state.index ? "primary.500" : "gray.700"
+                      index === props.state.index ? "#6a5c6d" : "gray.700"
                     }
                   >
                     {name}
                   </Text>
                 </HStack>
               </Pressable>
-            ))}
-          </VStack>
+            </Box>
+          ))}
         </VStack>
       </VStack>
     </DrawerContentScrollView>
@@ -90,7 +132,10 @@ export default function App() {
           drawerContent={(props) => <CustomDrawerContent {...props} />}
         >
           <Drawer.Screen name="Dashboard" component={DashboardScreen} />
+          <Drawer.Screen name="Notifications" component={BlocksScreen} />
+          <Drawer.Screen name="Farmers" component={BlocksScreen} />
           <Drawer.Screen name="Blocks" component={BlocksScreen} />
+          <Drawer.Screen name="Pool status" component={BlocksScreen} />
         </Drawer.Navigator>
       </NavigationContainer>
     </NativeBaseProvider>

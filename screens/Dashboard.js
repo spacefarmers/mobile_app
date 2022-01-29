@@ -63,7 +63,7 @@ export default function DashboardScreen() {
   return (
     <View>
       <FarmAddModal addFarm={addFarm} showModal={showFarmAddModal} setShowModal={setFarmAddModal} />
-      <Center pt="4">
+      <Center pt="4" mb="4">
         <Box
           w="90%"
           maxW="400"
@@ -95,7 +95,7 @@ export default function DashboardScreen() {
             <Text
                 fontSize="xs"
                 _light={{
-                  color: "blue.800",
+                  color: "info.700",
                 }}
                 _dark={{
                   color: "blue.600",
@@ -112,7 +112,7 @@ export default function DashboardScreen() {
              <Text
                 fontSize="xs"
                 _light={{
-                  color: "blue.800",
+                  color: "info.700",
                 }}
                 _dark={{
                   color: "blue.600",
@@ -131,7 +131,6 @@ export default function DashboardScreen() {
       </Center>
       <FlatList
         w="100%"
-        pt="3"
         data={farmIds}
         onRefresh={() => setLastRefresh(lastRefresh + 1)}
         refreshing={false}
@@ -146,6 +145,12 @@ export default function DashboardScreen() {
               colorScheme="darkBlue"
               leftIcon={<Icon as={Ionicons} name="add-outline" size="sm" />}
               onPress={() => { setFarmAddModal(true); }}
+              _text={{
+                color: "warmGray.50",
+              }}
+              _light={{
+                backgroundColor: "info.700",
+              }}
             >
               Add farm
             </Button>

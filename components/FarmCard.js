@@ -104,9 +104,7 @@ export default class FarmCard extends React.Component {
                 <Box>
                     <Center>
                       <HStack space={2} mt="1.5">
-                        <Icon as={Ionicons} name="chevron-back-outline" size="sm" />
-                        <Text>Points</Text>
-                        <Icon as={Ionicons} name="chevron-forward-outline" size="sm" />
+                        <Text fontWeight="700">Points</Text>
                       </HStack>
                     </Center>
                     <Center>
@@ -122,7 +120,7 @@ export default class FarmCard extends React.Component {
                             backgroundColor: "#fafafa",
                             backgroundGradientFrom: "#fafafa",
                             backgroundGradientTo: "#fafafa",
-                            color: (opacity = 1) => `rgba(0, 0, 255, ${opacity})`,
+                            color: (opacity = 1) => `rgba(1, 82, 126, ${opacity})`,
                             labelColor: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
                             strokeWidth: 2, // optional, default 3
                             barPercentage: 0.1,
@@ -139,7 +137,7 @@ export default class FarmCard extends React.Component {
                       )}
                     </Center>
                   <Center
-                    bg="blue.800"
+                    bg="info.700"
                     _dark={{
                       bg: "blue.600",
                     }}
@@ -167,7 +165,7 @@ export default class FarmCard extends React.Component {
                   <Text
                       fontSize="xs"
                       _light={{
-                        color: "blue.800",
+                        color: "info.700",
                       }}
                       _dark={{
                         color: "blue.600",
@@ -184,7 +182,7 @@ export default class FarmCard extends React.Component {
                   <Text
                       fontSize="xs"
                       _light={{
-                        color: "blue.800",
+                        color: "info.700",
                       }}
                       _dark={{
                         color: "blue.600",
@@ -211,7 +209,7 @@ export default class FarmCard extends React.Component {
                   <Text
                       fontSize="xs"
                       _light={{
-                        color: "blue.800",
+                        color: "info.700",
                       }}
                       _dark={{
                         color: "blue.600",
@@ -228,7 +226,7 @@ export default class FarmCard extends React.Component {
                   <Text
                       fontSize="xs"
                       _light={{
-                        color: "blue.800",
+                        color: "info.700",
                       }}
                       _dark={{
                         color: "blue.600",
