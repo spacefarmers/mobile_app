@@ -132,6 +132,7 @@ export default function DashboardScreen() {
       <FlatList
         w="100%"
         data={farmIds}
+        keyExtractor={(item, index) => item}
         onRefresh={() => setLastRefresh(lastRefresh + 1)}
         refreshing={false}
         renderItem={({ item, index }) => (
@@ -156,7 +157,6 @@ export default function DashboardScreen() {
             </Button>
           </Center>
         )}
-        keyExtractor={({ id }, index) => index}
       />
     </View>
   )
