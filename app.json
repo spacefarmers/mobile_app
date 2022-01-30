@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "SpaceFarmers.io",
+    "name": "SpaceFarmers",
     "slug": "SpaceFarmers_io",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -24,6 +24,7 @@
     "android": {
       "package": "com.spacefarmers.chiapool",
       "versionCode": 1,
+      "permissions": [],
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#000000"
