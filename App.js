@@ -79,7 +79,7 @@ function CustomDrawerContent(props) {
             <Box key={name}>
               { getUnusedLabel(name) != undefined ? (
                 <Box>
-                  <Divider />
+                  <Divider mt="5"/>
                   <Text fontWeight="500" fontSize="14" px="5" py="3" color="gray.500">
                     { getLabel(name) }
                   </Text>
