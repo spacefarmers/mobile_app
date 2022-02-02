@@ -5,7 +5,8 @@ import {
 } from '@react-navigation/drawer';
 import { NavigationContainer } from '@react-navigation/native';
 import DashboardScreen from './screens/Dashboard';
-import BlocksScreen from './screens/Blocks';
+import WorkInProgressScreen from './screens/WorkInProgress';
+import FarmersScreen from './screens/Farmers';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import {
   NativeBaseProvider,
@@ -132,10 +133,10 @@ export default function App() {
           drawerContent={(props) => <CustomDrawerContent {...props} />}
         >
           <Drawer.Screen name="Dashboard" component={DashboardScreen} />
-          <Drawer.Screen name="Notifications" component={BlocksScreen} />
-          <Drawer.Screen name="Farmers" component={BlocksScreen} />
-          <Drawer.Screen name="Blocks" component={BlocksScreen} />
-          <Drawer.Screen name="Pool status" component={BlocksScreen} />
+          <Drawer.Screen name="Notifications" component={WorkInProgressScreen} />
+          <Drawer.Screen name="Farmers" component={FarmersScreen} />
+          <Drawer.Screen name="Blocks" component={WorkInProgressScreen} />
+          <Drawer.Screen name="Pool status" component={WorkInProgressScreen} />
         </Drawer.Navigator>
       </NavigationContainer>
     </NativeBaseProvider>
