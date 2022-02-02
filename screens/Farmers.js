@@ -45,37 +45,14 @@ export default function FarmersScreen() {
           px="4"
           py="2"
         >
-          <Text
-            numberOfLines={1}
-            _dark={{
-              color: "warmGray.50",
-            }}
-            color="coolGray.800"
-            bold
-          >
+          <Text numberOfLines={1} bold>
             Farmer
           </Text>
           <Spacer />
-          <Text
-            w="100"
-            textAlign="right"
-            _dark={{
-              color: "warmGray.50",
-            }}
-            color="coolGray.800"
-            bold
-          >
+          <Text w="100" textAlign="right" bold>
             Points
           </Text>
-          <Text
-            w="60"
-            textAlign="right"
-            _dark={{
-              color: "warmGray.50",
-            }}
-            color="coolGray.800"
-            bold
-          >
+          <Text w="60" textAlign="right" bold>
             Share
           </Text>
         </HStack>
@@ -98,57 +75,20 @@ export default function FarmersScreen() {
               >
                 <HStack flex={1} space={3} justifyContent="space-between">
                   <VStack flex={1}>
-                    <Text
-                      numberOfLines={1}
-                      _dark={{
-                        color: "warmGray.50",
-                      }}
-                      color="coolGray.800"
-                      bold
-                    >
+                    <Text numberOfLines={1} bold>
                       {item.attributes.farmer_name}
                     </Text>
-                    <Text
-                      numberOfLines={1}
-                      ellipsizeMode="middle"
-                      color="coolGray.600"
-                      _dark={{
-                        color: "warmGray.200",
-                      }}
-                    >
+                    <Text numberOfLines={1} ellipsizeMode="middle">
                       {item.id}
                     </Text>
                   </VStack>
                   <VStack w="100">
-                    <Text
-                      textAlign="right"
-                      _dark={{
-                        color: "warmGray.50",
-                      }}
-                      color="coolGray.800"
-                      bold
-                    >
+                    <Text textAlign="right" bold>
                       {item.attributes.points_24h}
                     </Text>
-                    <Text
-                      textAlign="right"
-                      color="coolGray.600"
-                      _dark={{
-                        color: "warmGray.200",
-                      }}
-                    >
-                      {item.attributes.tib_24h} TiB
-                    </Text>
+                    <Text textAlign="right">{item.attributes.tib_24h} TiB</Text>
                   </VStack>
-                  <Text
-                    w="60"
-                    pt="2"
-                    textAlign="right"
-                    _dark={{
-                      color: "warmGray.50",
-                    }}
-                    color="coolGray.800"
-                  >
+                  <Text w="60" pt="2" textAlign="right">
                     {item.attributes.ratio_24h} %
                   </Text>
                 </HStack>
@@ -167,22 +107,8 @@ export default function FarmersScreen() {
             onPress={() => {
               setPage((oldPage) => oldPage - 1);
             }}
-            _text={{
-              color: "warmGray.50",
-            }}
-            _light={{
-              backgroundColor: "info.700",
-            }}
           ></Button>
-          <Text
-            pt="2"
-            _dark={{
-              color: "warmGray.50",
-            }}
-            color="coolGray.800"
-          >
-            Page {page}
-          </Text>
+          <Text pt="2">Page {page}</Text>
           <Button
             isDisabled={farms.count < 10}
             colorScheme="darkBlue"
@@ -195,12 +121,6 @@ export default function FarmersScreen() {
             }
             onPress={() => {
               setPage((oldPage) => oldPage + 1);
-            }}
-            _text={{
-              color: "warmGray.50",
-            }}
-            _light={{
-              backgroundColor: "info.700",
             }}
           ></Button>
         </HStack>
