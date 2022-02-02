@@ -22,38 +22,38 @@ export default function FarmersScreen() {
   }
 
   return (
-      <Center style={{flex:1}}>
-        <Box w="90%" maxW="1000" style={{flex:1}}>
+      <Center flex={1}>
+        <Box w="90%" maxW="1000" flex={1}>
         <HStack borderBottomWidth="1" space={3} justifyContent="space-between" px="4" py="2">
-            <Text _dark={{
+            <Text numberOfLines={1} _dark={{
             color: "warmGray.50"
           }} color="coolGray.800" bold>
               Farmer
             </Text>
             <Spacer />
-            <Text w="100" _dark={{
+            <Text w="100" textAlign="right" _dark={{
         color: "warmGray.50"
       }} color="coolGray.800" bold>
               Points
             </Text>
-            <Text _dark={{
+            <Text w="60" textAlign="right" _dark={{
         color: "warmGray.50"
       }} color="coolGray.800" bold>
               Share
             </Text>
           </HStack>
           { loading ? (
-            <Spinner style={{flex:1}} size="lg" />
+            <Spinner flex={1} size="lg" />
           ) : (
-            <FlatList style={{flex:1}} data={farms}
+            <FlatList flex={1} data={farms}
             renderItem={({
             item
-          }) => <Box borderBottomWidth="1" _dark={{
+          }) => <Box flex={1} borderBottomWidth="1" _dark={{
             borderColor: "gray.600"
           }} borderColor="coolGray.200" px="4" py="2">
-                  <HStack space={3} justifyContent="space-between">
-                    <VStack maxW="50%">
-                      <Text _dark={{
+                  <HStack flex={1} space={3} justifyContent="space-between">
+                    <VStack flex={1}>
+                      <Text numberOfLines={1} _dark={{
                   color: "warmGray.50"
                 }} color="coolGray.800" bold>
                         {item.attributes.farmer_name}
@@ -64,20 +64,19 @@ export default function FarmersScreen() {
                         {item.id}
                       </Text>
                     </VStack>
-                    <Spacer />
                     <VStack w="100">
-                      <Text _dark={{
+                      <Text  textAlign="right" _dark={{
                   color: "warmGray.50"
                 }} color="coolGray.800" bold>
                         {item.attributes.points_24h}
                       </Text>
-                      <Text color="coolGray.600" _dark={{
+                      <Text  textAlign="right" color="coolGray.600" _dark={{
                   color: "warmGray.200"
                 }}>
                         {item.attributes.tib_24h} TiB
                       </Text>
                     </VStack>
-                    <Text _dark={{
+                    <Text w="60" pt="2" textAlign="right" _dark={{
                 color: "warmGray.50"
               }} color="coolGray.800">
                       {item.attributes.ratio_24h} %
