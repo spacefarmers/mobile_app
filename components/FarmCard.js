@@ -1,9 +1,8 @@
 import React from "react";
-import { Box, Text, Center, Heading, Flex, Icon, HStack } from "native-base";
+import { Box, Text, Center, Heading, Flex, HStack, Spinner } from "native-base";
 import { BarChart } from "react-native-chart-kit";
 import { Dimensions } from "react-native";
 import { TouchableOpacity } from "react-native";
-import { Ionicons } from "@expo/vector-icons";
 import FarmOptionsModal from "../components/FarmOptionsModal";
 
 export default class FarmCard extends React.Component {
@@ -103,6 +102,7 @@ export default class FarmCard extends React.Component {
             overflow="hidden"
             borderColor="coolGray.200"
             borderWidth="1"
+            minHeight="350"
             mb="3"
             _dark={{
               borderColor: "coolGray.600",
@@ -117,7 +117,7 @@ export default class FarmCard extends React.Component {
             }}
           >
             {this.state.loading ? (
-              "LOADING"
+              <Spinner flex={1} py="4" />
             ) : (
               <Box>
                 <Box>
@@ -126,9 +126,9 @@ export default class FarmCard extends React.Component {
                       <Text fontWeight="700">Points</Text>
                     </HStack>
                   </Center>
-                  <Center>
+                  <Center minHeight="250">
                     {this.state.graphLoading ? (
-                      "LOADING"
+                      <Spinner flex={1} py="4" />
                     ) : (
                       <BarChart
                         data={this.graphPointsData}
