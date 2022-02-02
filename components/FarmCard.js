@@ -1,18 +1,10 @@
-import React from 'react';
-import {
-  Box,
-  Text,
-  Center,
-  Heading,
-  Flex,
-  Icon,
-  HStack,
-} from "native-base";
+import React from "react";
+import { Box, Text, Center, Heading, Flex, Icon, HStack } from "native-base";
 import { BarChart } from "react-native-chart-kit";
 import { Dimensions } from "react-native";
-import { TouchableOpacity } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
-import FarmOptionsModal from "../components/FarmOptionsModal"
+import { TouchableOpacity } from "react-native";
+import { Ionicons } from "@expo/vector-icons";
+import FarmOptionsModal from "../components/FarmOptionsModal";
 
 export default class FarmCard extends React.Component {
   constructor(props) {
@@ -21,11 +13,16 @@ export default class FarmCard extends React.Component {
       labels: [],
       datasets: [
         {
-          data: []
-        }
-      ]
+          data: [],
+        },
+      ],
     };
-    this.state = { loading: true, graphLoading: true, showRemoveModal: false, currentGraph: 'points' };
+    this.state = {
+      loading: true,
+      graphLoading: true,
+      showRemoveModal: false,
+      currentGraph: "points",
+    };
   }
 
   async componentDidMount() {
@@ -39,48 +36,68 @@ export default class FarmCard extends React.Component {
   }
 
   async getFarmGraph() {
-    const response = await fetch('https://spacefarmers.io/api/graphs/farmer/points/' + this.props.farmId);
+    const response = await fetch(
+      "https://spacefarmers.io/api/graphs/farmer/points/" + this.props.farmId
+    );
     const data = await response.json();
     data.reverse();
-    this.graphPointsData.datasets[0].data = data.slice(-72).map(x => x['value'] * 50);
-    this.graphPointsData.labels = data.slice(-72).map(x => {
-      const date = new Date(x['timestamp'] * 1000);
-      const hour = date.getHours()
+    this.graphPointsData.datasets[0].data = data
+      .slice(-72)
+      .map((x) => x["value"] * 50);
+    this.graphPointsData.labels = data.slice(-72).map((x) => {
+      const date = new Date(x["timestamp"] * 1000);
+      const hour = date.getHours();
       if (hour == 0) {
-        return date.getDate() + "/" + date.getMonth() + 1
+        return date.getDate() + "/" + date.getMonth() + 1;
       }
-      return ""
+      return "";
     });
-    this.setState({graphLoading: false});
+    this.setState({ graphLoading: false });
   }
 
   async getFarm() {
-    this.setState({loading: true, graphLoading: true});
-    const response = await fetch('https://spacefarmers.io/api/farmers/' + this.props.farmId);
+    this.setState({ loading: true, graphLoading: true });
+    const response = await fetch(
+      "https://spacefarmers.io/api/farmers/" + this.props.farmId
+    );
     const json = await response.json();
     this.farm = json.data;
-    this.props.addSize(sizes => ({ ...sizes, [this.props.index]: this.farm.attributes.tib_24h}));
-    this.props.addPoints(points => ({ ...points, [this.props.index]: this.farm.attributes.points_24h}));
-    this.setState({loading: false});
+    this.props.addSize((sizes) => ({
+      ...sizes,
+      [this.props.index]: this.farm.attributes.tib_24h,
+    }));
+    this.props.addPoints((points) => ({
+      ...points,
+      [this.props.index]: this.farm.attributes.points_24h,
+    }));
+    this.setState({ loading: false });
     this.getFarmGraph();
   }
 
   showRemoveModal(show = false) {
-    this.setState({showRemoveModal: show});
+    this.setState({ showRemoveModal: show });
   }
 
   removeFarm() {
-    this.props.addSize(sizes => ({ ...sizes, [this.props.index]: 0}));
-    this.props.addPoints(points => ({ ...points, [this.props.index]: 0}));
+    this.props.addSize((sizes) => ({ ...sizes, [this.props.index]: 0 }));
+    this.props.addPoints((points) => ({ ...points, [this.props.index]: 0 }));
     this.props.removeFarm(this.props.index);
     this.showRemoveModal(false);
   }
 
   render() {
-    return(
+    return (
       <Box maxW="400" w="90%">
-        <FarmOptionsModal showModal={this.state.showRemoveModal} setShowModal={this.showRemoveModal.bind(this)} removeFarm={this.removeFarm.bind(this)} />
-        <TouchableOpacity delayPressIn="300" delayLongPress="300" onLongPress={() => this.showRemoveModal(true)}>
+        <FarmOptionsModal
+          showModal={this.state.showRemoveModal}
+          setShowModal={this.showRemoveModal.bind(this)}
+          removeFarm={this.removeFarm.bind(this)}
+        />
+        <TouchableOpacity
+          delayPressIn="300"
+          delayLongPress="300"
+          onLongPress={() => this.showRemoveModal(true)}
+        >
           <Box
             rounded="lg"
             overflow="hidden"
@@ -99,43 +116,52 @@ export default class FarmCard extends React.Component {
               backgroundColor: "gray.50",
             }}
           >
-            {this.state.loading ? "LOADING" : (
+            {this.state.loading ? (
+              "LOADING"
+            ) : (
               <Box>
                 <Box>
-                    <Center>
-                      <HStack space={2} mt="1.5">
-                        <Text fontWeight="700">Points</Text>
-                      </HStack>
-                    </Center>
-                    <Center>
-                      {this.state.graphLoading ? "LOADING" : (
-                        <BarChart
-                          data={this.graphPointsData}
-                          width={Math.min(400, Dimensions.get("window").width * 0.85)}
-                          height={250}
-                          yAxisInterval={10} // optional, defaults to 1
-                          fromZero={true}
-                          xLabelsOffset={-10}
-                          chartConfig={{
-                            backgroundColor: "#fafafa",
-                            backgroundGradientFrom: "#fafafa",
-                            backgroundGradientTo: "#fafafa",
-                            color: (opacity = 1) => `rgba(1, 82, 126, ${opacity})`,
-                            labelColor: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
-                            strokeWidth: 2, // optional, default 3
-                            barPercentage: 0.1,
-                            decimalPlaces: 0,
-                          }}
-                          bezier
-                          style={{
-                            marginTop: 10,
-                            marginBottom: -10,
-                            marginLeft: -40,
-                            borderRadius: 8
-                          }}
-                        />
-                      )}
-                    </Center>
+                  <Center>
+                    <HStack space={2} mt="1.5">
+                      <Text fontWeight="700">Points</Text>
+                    </HStack>
+                  </Center>
+                  <Center>
+                    {this.state.graphLoading ? (
+                      "LOADING"
+                    ) : (
+                      <BarChart
+                        data={this.graphPointsData}
+                        width={Math.min(
+                          400,
+                          Dimensions.get("window").width * 0.85
+                        )}
+                        height={250}
+                        yAxisInterval={10} // optional, defaults to 1
+                        fromZero={true}
+                        xLabelsOffset={-10}
+                        chartConfig={{
+                          backgroundColor: "#fafafa",
+                          backgroundGradientFrom: "#fafafa",
+                          backgroundGradientTo: "#fafafa",
+                          color: (opacity = 1) =>
+                            `rgba(1, 82, 126, ${opacity})`,
+                          labelColor: (opacity = 1) =>
+                            `rgba(0, 0, 0, ${opacity})`,
+                          strokeWidth: 2, // optional, default 3
+                          barPercentage: 0.1,
+                          decimalPlaces: 0,
+                        }}
+                        bezier
+                        style={{
+                          marginTop: 10,
+                          marginBottom: -10,
+                          marginLeft: -40,
+                          borderRadius: 8,
+                        }}
+                      />
+                    )}
+                  </Center>
                   <Center
                     bg="info.700"
                     _dark={{
@@ -162,7 +188,7 @@ export default class FarmCard extends React.Component {
                   }}
                 >
                   <Box width="50%" px="4">
-                  <Text
+                    <Text
                       fontSize="xs"
                       _light={{
                         color: "info.700",
@@ -179,7 +205,7 @@ export default class FarmCard extends React.Component {
                     </Heading>
                   </Box>
                   <Box width="50%" px="4">
-                  <Text
+                    <Text
                       fontSize="xs"
                       _light={{
                         color: "info.700",
@@ -206,7 +232,7 @@ export default class FarmCard extends React.Component {
                   }}
                 >
                   <Box width="50%" px="4">
-                  <Text
+                    <Text
                       fontSize="xs"
                       _light={{
                         color: "info.700",
@@ -223,7 +249,7 @@ export default class FarmCard extends React.Component {
                     </Heading>
                   </Box>
                   <Box width="50%" px="4">
-                  <Text
+                    <Text
                       fontSize="xs"
                       _light={{
                         color: "info.700",

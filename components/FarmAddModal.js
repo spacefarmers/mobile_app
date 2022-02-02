@@ -1,10 +1,5 @@
-import React from 'react';
-import {
-  Modal,
-  FormControl,
-  Input,
-  Button,
-} from "native-base";
+import React from "react";
+import { Modal, FormControl, Input, Button } from "native-base";
 
 const initialState = { loading: false, farmId: "", error: "" };
 
@@ -15,8 +10,8 @@ export default class FarmAddModal extends React.Component {
   }
 
   handleChange = (value) => {
-    this.setState({farmId: value});
-  }
+    this.setState({ farmId: value });
+  };
 
   async addFarm() {
     this.setState({ loading: true, error: "" });
@@ -24,13 +19,14 @@ export default class FarmAddModal extends React.Component {
       this.setState({ loading: false, error: "Please fill in a launcher ID" });
       return;
     }
-    const response = await fetch('https://spacefarmers.io/api/farmers/' + this.state.farmId);
+    const response = await fetch(
+      "https://spacefarmers.io/api/farmers/" + this.state.farmId
+    );
     if (response.status === 200) {
       await this.props.addFarm(this.state.farmId);
       this.props.setShowModal(false);
       this.setState(initialState);
-    }
-    else if (response.status === 404) {
+    } else if (response.status === 404) {
       this.setState({ loading: false, error: "Launcher ID not found" });
     } else {
       this.setState({ loading: false });
@@ -40,10 +36,10 @@ export default class FarmAddModal extends React.Component {
   closeModal = () => {
     this.setState(initialState);
     this.props.setShowModal(false);
-  }
+  };
 
   render() {
-    return(
+    return (
       <Modal isOpen={this.props.showModal} onClose={() => this.closeModal()}>
         <Modal.Content maxWidth="400px">
           <Modal.CloseButton />
@@ -51,9 +47,12 @@ export default class FarmAddModal extends React.Component {
           <Modal.Body>
             <FormControl isInvalid={this.state.error != ""}>
               <FormControl.Label>Launcher ID</FormControl.Label>
-              <Input value={this.state.farmId} onChangeText={this.handleChange} />
+              <Input
+                value={this.state.farmId}
+                onChangeText={this.handleChange}
+              />
               <FormControl.ErrorMessage>
-                { this.state.error }
+                {this.state.error}
               </FormControl.ErrorMessage>
             </FormControl>
           </Modal.Body>

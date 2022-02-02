@@ -1,9 +1,5 @@
-import React from 'react';
-import {
-  Modal,
-  Button,
-  Center
-} from "native-base";
+import React from "react";
+import { Modal, Button, Center } from "native-base";
 
 const initialState = { loading: false, farmId: "" };
 
@@ -14,12 +10,15 @@ export default class FarmOptionsModal extends React.Component {
   }
 
   handleChange = (value) => {
-    this.setState({farmId: value});
-  }
+    this.setState({ farmId: value });
+  };
 
   render() {
-    return(
-      <Modal isOpen={this.props.showModal} onClose={() => this.props.setShowModal(false)}>
+    return (
+      <Modal
+        isOpen={this.props.showModal}
+        onClose={() => this.props.setShowModal(false)}
+      >
         <Modal.Content maxWidth="400px">
           <Modal.CloseButton />
           <Modal.Header>Remove farm?</Modal.Header>
@@ -30,7 +29,7 @@ export default class FarmOptionsModal extends React.Component {
                   variant="ghost"
                   colorScheme="blueGray"
                   onPress={() => {
-                    this.props.setShowModal(false)
+                    this.props.setShowModal(false);
                   }}
                 >
                   Cancel

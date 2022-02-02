@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react"
+import React, { useState, useEffect } from "react";
 import {
   Box,
   Center,
@@ -9,11 +9,11 @@ import {
   Flex,
   Icon,
   Button,
-} from "native-base"
-import FarmCard from "../components/FarmCard"
-import FarmAddModal from "../components/FarmAddModal"
-import { Ionicons } from '@expo/vector-icons';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+} from "native-base";
+import FarmCard from "../components/FarmCard";
+import FarmAddModal from "../components/FarmAddModal";
+import { Ionicons } from "@expo/vector-icons";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function DashboardScreen() {
   const [showFarmAddModal, setFarmAddModal] = useState(false);
@@ -23,8 +23,8 @@ export default function DashboardScreen() {
   const [farmIds, setFarmIds] = useState([]);
 
   useEffect(() => {
-    async function getFarms() { 
-      let farmsStored = await AsyncStorage.getItem('@farmIds');
+    async function getFarms() {
+      let farmsStored = await AsyncStorage.getItem("@farmIds");
       let farmArray = JSON.parse(farmsStored);
       farmArray.forEach(addFarm);
     }
@@ -33,26 +33,26 @@ export default function DashboardScreen() {
   }, []);
 
   useEffect(() => {
-    async function storeFarms() { 
-      await AsyncStorage.setItem('@farmIds', JSON.stringify(farmIds));
+    async function storeFarms() {
+      await AsyncStorage.setItem("@farmIds", JSON.stringify(farmIds));
     }
 
     storeFarms();
   }, [farmIds]);
 
   const unique = (value, index, self) => {
-    return self.indexOf(value) === index
-  }
+    return self.indexOf(value) === index;
+  };
 
   const addFarm = async (id) => {
-    setFarmIds(ids => ids.concat(id).filter(unique));
-  }
+    setFarmIds((ids) => ids.concat(id).filter(unique));
+  };
 
   const removeFarm = async (index) => {
     var newIds = [...farmIds];
     newIds.splice(index, 1);
     setFarmIds(newIds);
-  }
+  };
 
   const renderItem = ({ farm }) => (
     <Center>
@@ -62,7 +62,11 @@ export default function DashboardScreen() {
 
   return (
     <View>
-      <FarmAddModal addFarm={addFarm} showModal={showFarmAddModal} setShowModal={setFarmAddModal} />
+      <FarmAddModal
+        addFarm={addFarm}
+        showModal={showFarmAddModal}
+        setShowModal={setFarmAddModal}
+      />
       <Center pt="4" mb="4">
         <Box
           w="90%"
@@ -92,7 +96,7 @@ export default function DashboardScreen() {
             }}
           >
             <Box width="50%" px="4">
-            <Text
+              <Text
                 fontSize="xs"
                 _light={{
                   color: "info.700",
@@ -105,11 +109,14 @@ export default function DashboardScreen() {
                 Total size
               </Text>
               <Heading size="md">
-                {Math.round(Object.values(farmSizes).reduce((a, b) => a + b, 0) * 100) / 100} TiB
+                {Math.round(
+                  Object.values(farmSizes).reduce((a, b) => a + b, 0) * 100
+                ) / 100}{" "}
+                TiB
               </Heading>
             </Box>
             <Box width="50%" px="4">
-             <Text
+              <Text
                 fontSize="xs"
                 _light={{
                   color: "info.700",
@@ -137,7 +144,14 @@ export default function DashboardScreen() {
         refreshing={false}
         renderItem={({ item, index }) => (
           <Center>
-            <FarmCard farmId={item} index={index} addSize={setFarmSize} addPoints={setFarmPoints} removeFarm={removeFarm} lastRefresh={lastRefresh} />
+            <FarmCard
+              farmId={item}
+              index={index}
+              addSize={setFarmSize}
+              addPoints={setFarmPoints}
+              removeFarm={removeFarm}
+              lastRefresh={lastRefresh}
+            />
           </Center>
         )}
         ListFooterComponent={() => (
@@ -145,7 +159,9 @@ export default function DashboardScreen() {
             <Button
               colorScheme="darkBlue"
               leftIcon={<Icon as={Ionicons} name="add-outline" size="sm" />}
-              onPress={() => { setFarmAddModal(true); }}
+              onPress={() => {
+                setFarmAddModal(true);
+              }}
               _text={{
                 color: "warmGray.50",
               }}
@@ -159,5 +175,5 @@ export default function DashboardScreen() {
         )}
       />
     </View>
-  )
+  );
 }
