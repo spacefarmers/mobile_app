@@ -33,7 +33,7 @@ const getIcon = (screenName) => {
     case "Farmers":
       return "tractor";
     case "Blocks":
-      return "variable-box";
+      return "square-root-box";
     case "Pool status":
       return "chart-bar";
     default:

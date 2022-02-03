@@ -62,7 +62,7 @@ export default function FarmersListScreen({ navigation }) {
             flex={1}
             data={farms}
             renderItem={({ item }) => (
-              <TouchableHighlight onPress={() => navigation.navigate('Farmer', { farmId: item.id })}>
+              <TouchableHighlight underlayColor="rgba(6, 182, 212, 0.1)" onPress={() => navigation.navigate('Farmer', { farmId: item.id })}>
                 <Box
                   flex={1}
                   borderBottomWidth="1"
