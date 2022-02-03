@@ -96,6 +96,7 @@ export default class FarmCard extends React.Component {
           delayPressIn="300"
           delayLongPress="300"
           onLongPress={() => this.showRemoveModal(true)}
+          onPress={this.props.onClick}
         >
           <Box
             rounded="lg"

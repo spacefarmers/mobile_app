@@ -13,9 +13,9 @@ import {
   View,
 } from "native-base";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { Dimensions } from "react-native";
+import { TouchableHighlight } from "react-native";
 
-export default function FarmersScreen() {
+export default function FarmersListScreen({ navigation }) {
   const [page, setPage] = useState(1);
   const [farms, setFarms] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -30,7 +30,6 @@ export default function FarmersScreen() {
       "https://spacefarmers.io/api/farmers/?page=" + page
     );
     const json = await response.json();
-    console.log(json.data);
     setFarms(json.data);
     setLoading(false);
   }
@@ -63,36 +62,40 @@ export default function FarmersScreen() {
             flex={1}
             data={farms}
             renderItem={({ item }) => (
-              <Box
-                flex={1}
-                borderBottomWidth="1"
-                _dark={{
-                  borderColor: "gray.600",
-                }}
-                borderColor="coolGray.200"
-                px="4"
-                py="2"
-              >
-                <HStack flex={1} space={3} justifyContent="space-between">
-                  <VStack flex={1}>
-                    <Text numberOfLines={1} bold>
-                      {item.attributes.farmer_name}
+              <TouchableHighlight onPress={() => navigation.navigate('Farmer', { farmId: item.id })}>
+                <Box
+                  flex={1}
+                  borderBottomWidth="1"
+                  _dark={{
+                    borderColor: "gray.600",
+                  }}
+                  borderColor="coolGray.200"
+                  px="4"
+                  py="2"
+                >
+                  <HStack flex={1} space={3} justifyContent="space-between">
+                    <VStack flex={1}>
+                      <Text numberOfLines={1} bold>
+                        {item.attributes.farmer_name}
+                      </Text>
+                      <Text numberOfLines={1} ellipsizeMode="middle">
+                        {item.id}
+                      </Text>
+                    </VStack>
+                    <VStack w="100">
+                      <Text textAlign="right" bold>
+                        {item.attributes.points_24h}
+                      </Text>
+                      <Text textAlign="right">
+                        {item.attributes.tib_24h} TiB
+                      </Text>
+                    </VStack>
+                    <Text w="60" pt="2" textAlign="right">
+                      {item.attributes.ratio_24h} %
                     </Text>
-                    <Text numberOfLines={1} ellipsizeMode="middle">
-                      {item.id}
-                    </Text>
-                  </VStack>
-                  <VStack w="100">
-                    <Text textAlign="right" bold>
-                      {item.attributes.points_24h}
-                    </Text>
-                    <Text textAlign="right">{item.attributes.tib_24h} TiB</Text>
-                  </VStack>
-                  <Text w="60" pt="2" textAlign="right">
-                    {item.attributes.ratio_24h} %
-                  </Text>
-                </HStack>
-              </Box>
+                  </HStack>
+                </Box>
+              </TouchableHighlight>
             )}
             keyExtractor={(item) => item.id}
           />

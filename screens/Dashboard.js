@@ -11,11 +11,10 @@ import {
   Button,
 } from "native-base";
 import FarmCard from "../components/FarmCard";
-import FarmAddModal from "../components/FarmAddModal";
 import { Ionicons } from "@expo/vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-export default function DashboardScreen() {
+export default function DashboardScreen({ navigation }) {
   const [showFarmAddModal, setFarmAddModal] = useState(false);
   const [farmSizes, setFarmSize] = useState({});
   const [farmPoints, setFarmPoints] = useState({});
@@ -24,10 +23,17 @@ export default function DashboardScreen() {
 
   useEffect(() => {
     async function getFarms() {
+      setFarmIds([]);
+      setFarmSize({});
+      setFarmPoints({});
       let farmsStored = await AsyncStorage.getItem("@farmIds");
       let farmArray = JSON.parse(farmsStored);
       farmArray.forEach(addFarm);
     }
+
+    navigation.addListener('focus', () => {
+      getFarms();
+    });
 
     getFarms();
   }, []);
@@ -62,11 +68,6 @@ export default function DashboardScreen() {
 
   return (
     <View>
-      <FarmAddModal
-        addFarm={addFarm}
-        showModal={showFarmAddModal}
-        setShowModal={setFarmAddModal}
-      />
       <Center pt="4" mb="4">
         <Box
           w="90%"
@@ -136,44 +137,53 @@ export default function DashboardScreen() {
           </Flex>
         </Box>
       </Center>
-      <FlatList
-        w="100%"
-        data={farmIds}
-        keyExtractor={(item, index) => item}
-        onRefresh={() => setLastRefresh(lastRefresh + 1)}
-        refreshing={false}
-        renderItem={({ item, index }) => (
-          <Center>
-            <FarmCard
-              farmId={item}
-              index={index}
-              addSize={setFarmSize}
-              addPoints={setFarmPoints}
-              removeFarm={removeFarm}
-              lastRefresh={lastRefresh}
-            />
-          </Center>
-        )}
-        ListFooterComponent={() => (
-          <Center pt="4" pb="100">
-            <Button
-              colorScheme="darkBlue"
-              leftIcon={<Icon as={Ionicons} name="add-outline" size="sm" />}
-              onPress={() => {
-                setFarmAddModal(true);
-              }}
-              _text={{
-                color: "warmGray.50",
-              }}
-              _light={{
-                backgroundColor: "info.700",
-              }}
-            >
-              Add farm
-            </Button>
-          </Center>
-        )}
-      />
+      { farmIds.length == 0 ? (
+        <Center>
+          <Box
+            w="90%"
+            maxW="400"
+            rounded="lg"
+            overflow="hidden"
+            borderColor="coolGray.200"
+            borderWidth="1"
+            _dark={{
+              borderColor: "coolGray.600",
+              backgroundColor: "gray.700",
+            }}
+            _web={{
+              shadow: 2,
+              borderWidth: 0,
+            }}
+            _light={{
+              backgroundColor: "gray.50",
+            }}
+          >
+            <Text p="3" textAlign='center'>Lookup your farm in the farmers list to add it to the dashboard</Text>
+          </Box>
+        </Center>
+      ) : (
+        <FlatList
+          w="100%"
+          data={farmIds}
+          keyExtractor={(item, index) => item}
+          onRefresh={() => setLastRefresh(lastRefresh + 1)}
+          refreshing={false}
+          renderItem={({ item, index }) => (
+            <Center>
+              <FarmCard
+                farmId={item}
+                index={index}
+                addSize={setFarmSize}
+                addPoints={setFarmPoints}
+                removeFarm={removeFarm}
+                lastRefresh={lastRefresh}
+                onClick={() => navigation.navigate('Farmer', { farmId: item })}
+              />
+            </Center>
+          )}
+        />
+      )}
+      
     </View>
   );
 }
