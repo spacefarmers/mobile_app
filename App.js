@@ -142,7 +142,7 @@ export default function App() {
     <NativeBaseProvider>
       <NavigationContainer>
         <Drawer.Navigator
-          initialRouteName="Farmers"
+          initialRouteName="Dashboard"
           drawerContent={(props) => <CustomDrawerContent {...props} />}
         >
           <Drawer.Screen name="Dashboard" component={DashboardScreen} />
