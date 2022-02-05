@@ -181,6 +181,9 @@ export default function DashboardScreen({ navigation }) {
               />
             </Center>
           )}
+          ListFooterComponent={
+            <View h="100" />
+          }
         />
       )}
       
