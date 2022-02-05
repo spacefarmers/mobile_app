@@ -10,25 +10,36 @@ import {
   Button,
   Icon,
   Spinner,
-  View,
+  Modal,
+  FormControl,
+  Input,
 } from "native-base";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { TouchableHighlight } from "react-native";
+import { TouchableHighlight, DeviceEventEmitter } from "react-native";
 
 export default function FarmersListScreen({ navigation }) {
   const [page, setPage] = useState(1);
   const [farms, setFarms] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [showFilters, setShowFilters] = useState(false);
+  const [searchQueryInput, setSearchQueryInput] = useState("");
+  const [searchQuery, setSearchQuery] = useState("");
 
   useEffect(() => {
     getFarms();
-  }, [page]);
+  }, [page, searchQuery]);
+
+  useEffect(() => {
+    DeviceEventEmitter.addListener("filtes.toggle", (eventData) => {
+      setShowFilters((prevState) => !prevState);
+    });
+  }, []);
 
   async function getFarms() {
     setLoading(true);
-    const response = await fetch(
-      "https://spacefarmers.io/api/farmers/?page=" + page
-    );
+    let url = "https://spacefarmers.io/api/farmers/?page=" + page;
+    if (searchQuery != "") url = url + "&search=" + searchQuery;
+    const response = await fetch(url);
     const json = await response.json();
     setFarms(json.data);
     setLoading(false);
@@ -62,7 +73,12 @@ export default function FarmersListScreen({ navigation }) {
             flex={1}
             data={farms}
             renderItem={({ item }) => (
-              <TouchableHighlight underlayColor="rgba(6, 182, 212, 0.1)" onPress={() => navigation.navigate('Farmer', { farmId: item.id })}>
+              <TouchableHighlight
+                underlayColor="rgba(6, 182, 212, 0.1)"
+                onPress={() =>
+                  navigation.navigate("Farmer", { farmId: item.id })
+                }
+              >
                 <Box
                   flex={1}
                   borderBottomWidth="1"
@@ -103,7 +119,6 @@ export default function FarmersListScreen({ navigation }) {
         <HStack py="2" space={5} justifyContent="space-between">
           <Button
             isDisabled={page <= 1}
-            colorScheme="darkBlue"
             leftIcon={
               <Icon as={MaterialCommunityIcons} name="chevron-left" size="sm" />
             }
@@ -113,8 +128,7 @@ export default function FarmersListScreen({ navigation }) {
           ></Button>
           <Text pt="2">Page {page}</Text>
           <Button
-            isDisabled={farms.count < 10}
-            colorScheme="darkBlue"
+            isDisabled={farms.length < 10}
             rightIcon={
               <Icon
                 as={MaterialCommunityIcons}
@@ -128,6 +142,44 @@ export default function FarmersListScreen({ navigation }) {
           ></Button>
         </HStack>
       </Box>
+
+      <Modal isOpen={showFilters} onClose={() => setShowFilters(false)}>
+        <Modal.Content maxWidth="400px">
+          <Modal.CloseButton />
+          <Modal.Header>Filter list</Modal.Header>
+          <Modal.Body>
+            <FormControl>
+              <FormControl.Label>Launcher ID / Name</FormControl.Label>
+              <Input value={searchQueryInput} onChangeText={setSearchQueryInput} />
+            </FormControl>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button.Group space={2}>
+              <Button
+                variant="ghost"
+                colorScheme="blueGray"
+                onPress={() => {
+                  setSearchQueryInput('');
+                  setSearchQuery('');
+                  setPage(1);
+                  setShowFilters(false);
+                }}
+              >
+                Reset
+              </Button>
+              <Button
+                onPress={() => {
+                  setSearchQuery(searchQueryInput);
+                  setPage(1);
+                  setShowFilters(false);
+                }}
+              >
+                Filter
+              </Button>
+            </Button.Group>
+          </Modal.Footer>
+        </Modal.Content>
+      </Modal>
     </Center>
   );
 }

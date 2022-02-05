@@ -21,6 +21,7 @@ import {
   Icon,
   Box,
 } from "native-base";
+import {TouchableOpacity, DeviceEventEmitter} from "react-native"
 
 const Drawer = createDrawerNavigator();
 
@@ -39,17 +40,6 @@ const getIcon = (screenName) => {
     default:
       return undefined;
   }
-};
-
-let currentLabel = "";
-
-const getUnusedLabel = (screenName) => {
-  const label = getLabel(screenName);
-  if (label == currentLabel) {
-    return undefined;
-  }
-  currentLabel = label;
-  return label;
 };
 
 const getLabel = (screenName) => {
@@ -78,9 +68,7 @@ const menuItem = (name, props) => {
         py="3"
         rounded="md"
         bg={
-          index === props.state.index
-            ? "rgba(6, 182, 212, 0.1)"
-            : "transparent"
+          index === props.state.index ? "rgba(6, 182, 212, 0.1)" : "transparent"
         }
         onPress={(event) => {
           props.navigation.navigate(name);
@@ -101,25 +89,19 @@ const menuItem = (name, props) => {
         </HStack>
       </Pressable>
     </Box>
-  )
-}
+  );
+};
 
 const menuLabel = (name) => {
   return (
     <Box>
       <Divider mt="5" />
-      <Text
-        fontWeight="500"
-        fontSize="14"
-        px="5"
-        py="3"
-        color="gray.500"
-      >
+      <Text fontWeight="500" fontSize="14" px="5" py="3" color="gray.500">
         {name}
       </Text>
     </Box>
-  )
-}
+  );
+};
 
 function CustomDrawerContent(props) {
   return (
@@ -135,13 +117,23 @@ function CustomDrawerContent(props) {
           />
         </Center>
         <VStack>
-          { menuLabel('Personal') }
-          { ['Dashboard', 'Notifications'].map((name) => menuItem(name, props))}
-          { menuLabel('Pool') }
-          { ['Farmers', 'Blocks', 'Pool status'].map((name) => menuItem(name, props))}
+          {menuLabel("Personal")}
+          {["Dashboard", "Notifications"].map((name) => menuItem(name, props))}
+          {menuLabel("Pool")}
+          {["Farmers", "Blocks", "Pool status"].map((name) =>
+            menuItem(name, props)
+          )}
         </VStack>
       </VStack>
     </DrawerContentScrollView>
+  );
+}
+
+function filterFarmers() {
+  return (
+    <TouchableOpacity onPress={() => DeviceEventEmitter.emit("filtes.toggle")}>
+      <Icon as={MaterialCommunityIcons} name="filter" size="sm" mr="4" />
+    </TouchableOpacity>
   );
 }
 
@@ -150,7 +142,7 @@ export default function App() {
     <NativeBaseProvider>
       <NavigationContainer>
         <Drawer.Navigator
-          initialRouteName="Dashboard"
+          initialRouteName="Farmers"
           drawerContent={(props) => <CustomDrawerContent {...props} />}
         >
           <Drawer.Screen name="Dashboard" component={DashboardScreen} />
@@ -158,7 +150,11 @@ export default function App() {
             name="Notifications"
             component={WorkInProgressScreen}
           />
-          <Drawer.Screen name="Farmers" component={FarmersListScreen} />
+          <Drawer.Screen
+            name="Farmers"
+            component={FarmersListScreen}
+            options={{ headerRight: filterFarmers }}
+          />
           <Drawer.Screen name="Farmer" component={FarmerScreen} />
           <Drawer.Screen name="Blocks" component={WorkInProgressScreen} />
           <Drawer.Screen name="Pool status" component={WorkInProgressScreen} />
