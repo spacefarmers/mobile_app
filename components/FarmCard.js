@@ -122,12 +122,7 @@ export default class FarmCard extends React.Component {
             ) : (
               <Box>
                 <Box>
-                  <Center>
-                    <HStack space={2} mt="1.5">
-                      <Text fontWeight="700">Points</Text>
-                    </HStack>
-                  </Center>
-                  <Center minHeight="250">
+                  <Center mt="7" minHeight="250">
                     {this.state.graphLoading ? (
                       <Spinner flex={1} py="4" />
                     ) : (
@@ -136,7 +131,7 @@ export default class FarmCard extends React.Component {
                         width={Math.min(
                           400,
                           Dimensions.get("window").width * 0.85
-                        )}
+                        ) + 20}
                         height={250}
                         yAxisInterval={10} // optional, defaults to 1
                         fromZero={true}
@@ -157,29 +152,45 @@ export default class FarmCard extends React.Component {
                         style={{
                           marginTop: 10,
                           marginBottom: -10,
-                          marginLeft: -40,
+                          marginLeft: -20,
                           borderRadius: 8,
                         }}
                       />
                     )}
                   </Center>
-                  <Center
+                  <Text
                     bg="info.700"
                     _dark={{
                       bg: "blue.600",
-                    }}
-                    _text={{
-                      color: "warmGray.50",
-                      fontWeight: "700",
-                      fontSize: "xs",
                     }}
                     position="absolute"
                     top="0"
                     px="3"
                     py="1.5"
+                    maxW="220"
+                    color= "white"
+                    fontWeight= "700"
+                    fontSize= "xs"
+                    numberOfLines={1}
+                    ellipsizeMode={"middle"}
                   >
                     {this.farm.attributes.farmer_name}
-                  </Center>
+                  </Text>
+
+                  <Text
+                    color="gray.500"
+                    position="absolute"
+                    top="0"
+                    right="0"
+                    pr="3"
+                    py="1.5"
+                    maxW="150"
+                    fontWeight="700"
+                    numberOfLines={1}
+                    ellipsizeMode={"middle"}
+                  >
+                    Points
+                  </Text>
                 </Box>
                 <Flex
                   direction="row"
