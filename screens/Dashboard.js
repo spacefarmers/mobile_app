@@ -2,20 +2,15 @@ import React, { useState, useEffect } from "react";
 import {
   Box,
   Center,
-  View,
   FlatList,
   Text,
   Heading,
   Flex,
-  Icon,
-  Button,
 } from "native-base";
 import FarmCard from "../components/FarmCard";
-import { Ionicons } from "@expo/vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function DashboardScreen({ navigation }) {
-  const [showFarmAddModal, setFarmAddModal] = useState(false);
   const [farmSizes, setFarmSize] = useState({});
   const [farmPoints, setFarmPoints] = useState({});
   const [lastRefresh, setLastRefresh] = useState(0);
@@ -67,7 +62,7 @@ export default function DashboardScreen({ navigation }) {
   );
 
   return (
-    <View>
+    <Box>
       <Center pt="4" mb="4">
         <Box
           w="90%"
@@ -182,11 +177,11 @@ export default function DashboardScreen({ navigation }) {
             </Center>
           )}
           ListFooterComponent={
-            <View h="100" />
+            <Box h="100" />
           }
         />
       )}
       
-    </View>
+    </Box>
   );
 }

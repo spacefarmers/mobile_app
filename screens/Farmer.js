@@ -13,6 +13,7 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { View, useWindowDimensions } from "react-native";
 import { TabView, TabBar, SceneMap } from "react-native-tab-view";
 import FarmDetails from "../components/FarmDetails";
+import FarmGraphs from "../components/FarmGraphs";
 
 export default function FarmScreen({ route }) {
   const { farmId } = route.params;
@@ -79,7 +80,7 @@ export default function FarmScreen({ route }) {
 
   const renderScene = SceneMap({
     details: () => <FarmDetails farm={farm} />,
-    graphs: wipRoute,
+    graphs: () => <FarmGraphs farmId={farmId} />,
     partials: wipRoute,
     payouts: wipRoute,
     blocks: wipRoute,
@@ -91,6 +92,12 @@ export default function FarmScreen({ route }) {
     return <Icon as={MaterialCommunityIcons} name={route.icon} size="sm" />;
   };
 
+  const tabSpinner = ({route}) => {
+    return <Box flex={1}>
+      <Spinner flex={1} size="lg" />
+    </Box>
+  }
+
   return (
     <Box flex={1}>
       {loading ? (
@@ -101,6 +108,7 @@ export default function FarmScreen({ route }) {
             <Heading py="3">{farm.attributes.farmer_name}</Heading>
           </Center>
           <TabView
+            lazy
             renderTabBar={(props) => (
               <TabBar
                 {...props}
@@ -111,6 +119,7 @@ export default function FarmScreen({ route }) {
                 renderIcon={renderIcon}
               />
             )}
+            renderLazyPlaceholder={tabSpinner}
             navigationState={{ index, routes }}
             renderScene={renderScene}
             onIndexChange={setTabIndex}

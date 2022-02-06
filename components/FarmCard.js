@@ -1,6 +1,6 @@
 import React from "react";
 import { Box, Text, Center, Heading, Flex, HStack, Spinner } from "native-base";
-import { BarChart } from "react-native-chart-kit";
+import { StackedBarChart } from "react-native-chart-kit";
 import { Dimensions } from "react-native";
 import { TouchableOpacity } from "react-native";
 import FarmOptionsModal from "../components/FarmOptionsModal";
@@ -10,17 +10,13 @@ export default class FarmCard extends React.Component {
     super(props);
     this.graphPointsData = {
       labels: [],
-      datasets: [
-        {
-          data: [],
-        },
-      ],
+      data: [],
+      barColors: ['#a4c9de']
     };
     this.state = {
       loading: true,
       graphLoading: true,
       showRemoveModal: false,
-      currentGraph: "points",
     };
   }
 
@@ -40,14 +36,14 @@ export default class FarmCard extends React.Component {
     );
     const data = await response.json();
     data.reverse();
-    this.graphPointsData.datasets[0].data = data
+    this.graphPointsData.data = data
       .slice(-72)
-      .map((x) => x["value"] * 50);
+      .map((x) => [x["value"]]);
     this.graphPointsData.labels = data.slice(-72).map((x) => {
       const date = new Date(x["timestamp"] * 1000);
       const hour = date.getHours();
       if (hour == 0) {
-        return date.getDate() + "/" + date.getMonth() + 1;
+        return date.getDate() + "/" + (parseInt(date.getMonth()) + 1);
       }
       return "";
     });
@@ -126,16 +122,17 @@ export default class FarmCard extends React.Component {
                     {this.state.graphLoading ? (
                       <Spinner flex={1} py="4" />
                     ) : (
-                      <BarChart
+                      <StackedBarChart
                         data={this.graphPointsData}
                         width={Math.min(
-                          400,
+                          390,
                           Dimensions.get("window").width * 0.85
-                        ) + 20}
+                        )}
                         height={250}
                         yAxisInterval={10} // optional, defaults to 1
                         fromZero={true}
-                        xLabelsOffset={-10}
+                        hideLegend={true}
+                        decimalPlaces={0}
                         chartConfig={{
                           backgroundColor: "#fafafa",
                           backgroundGradientFrom: "#fafafa",
@@ -146,13 +143,10 @@ export default class FarmCard extends React.Component {
                             `rgba(0, 0, 0, ${opacity})`,
                           strokeWidth: 2, // optional, default 3
                           barPercentage: 0.1,
-                          decimalPlaces: 0,
                         }}
-                        bezier
                         style={{
                           marginTop: 10,
                           marginBottom: -10,
-                          marginLeft: -20,
                           borderRadius: 8,
                         }}
                       />
