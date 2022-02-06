@@ -23,7 +23,7 @@
     },
     "android": {
       "package": "com.spacefarmers.chiapool",
-      "versionCode": 5,
+      "versionCode": 6,
       "permissions": [],
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
