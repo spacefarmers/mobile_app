@@ -1,5 +1,14 @@
 import React from "react";
-import { Center, ScrollView, Box, Spinner, Text, Row, Column } from "native-base";
+import {
+  Center,
+  ScrollView,
+  Box,
+  Spinner,
+  Text,
+  Row,
+  Column,
+  Heading,
+} from "native-base";
 import { LineChart, StackedBarChart } from "react-native-chart-kit";
 import { Dimensions } from "react-native";
 
@@ -38,8 +47,6 @@ export default class FarmGraphs extends React.Component {
     this.getPartialsChart();
     this.getSizeChart();
   }
-
-  async componentDidUpdate(prevProps, prevState) {}
 
   async getSizeChart() {
     const response = await fetch(
@@ -118,9 +125,10 @@ export default class FarmGraphs extends React.Component {
     return (
       <ScrollView py="4">
         <Center>
-          <Box maxW="1000" w="100%">
+          <Box maxW="1000" w="95%">
+            <Heading pl="2" size="md">Graphs</Heading>
             <Box
-              m="3"
+              my="3"
               rounded="lg"
               overflow="hidden"
               borderColor="coolGray.200"
@@ -190,7 +198,7 @@ export default class FarmGraphs extends React.Component {
             </Box>
 
             <Box
-              m="3"
+              my="3"
               rounded="lg"
               overflow="hidden"
               borderColor="coolGray.200"
@@ -260,7 +268,7 @@ export default class FarmGraphs extends React.Component {
             </Box>
 
             <Box
-              m="3"
+              my="3"
               rounded="lg"
               overflow="hidden"
               borderColor="coolGray.200"

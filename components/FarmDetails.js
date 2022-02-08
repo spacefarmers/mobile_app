@@ -44,7 +44,8 @@ export default class FarmDetails extends React.Component {
     return (
       <ScrollView py="4">
         <Center>
-          <Box maxW="1000" w="90%">
+          <Box maxW="1000" w="95%">
+            <Heading pl="2" size="md">Details</Heading>
             <Box
               p="3"
               mt="3"

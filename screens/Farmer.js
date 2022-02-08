@@ -14,6 +14,7 @@ import { View, useWindowDimensions } from "react-native";
 import { TabView, TabBar, SceneMap } from "react-native-tab-view";
 import FarmDetails from "../components/FarmDetails";
 import FarmGraphs from "../components/FarmGraphs";
+import FarmPartials from "../components/FarmPartials";
 
 export default function FarmScreen({ route }) {
   const { farmId } = route.params;
@@ -47,7 +48,7 @@ export default function FarmScreen({ route }) {
   const wipRoute = () => (
     <ScrollView py="4">
       <Center>
-        <Box maxW="1000" w="90%">
+        <Box maxW="1000" w="95%">
           <Box
             p="3"
             mt="3"
@@ -70,7 +71,7 @@ export default function FarmScreen({ route }) {
             }}
           >
             <Center>
-              <Text>This page is work in progress</Text>
+              <Heading size="md">This page is work in progress</Heading>
             </Center>
           </Box>
         </Box>
@@ -81,7 +82,7 @@ export default function FarmScreen({ route }) {
   const renderScene = SceneMap({
     details: () => <FarmDetails farm={farm} />,
     graphs: () => <FarmGraphs farmId={farmId} />,
-    partials: wipRoute,
+    partials: () => <FarmPartials farmId={farmId} />,
     payouts: wipRoute,
     blocks: wipRoute,
   });
