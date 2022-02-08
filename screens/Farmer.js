@@ -112,7 +112,7 @@ export default function FarmScreen({ route }) {
             renderTabBar={(props) => (
               <TabBar
                 {...props}
-                style={{ backgroundColor: "white" }}
+                style={{ backgroundColor: "#fafafa" }}
                 indicatorStyle={{
                   backgroundColor: 'rgb(3, 105, 161)',
                 }}

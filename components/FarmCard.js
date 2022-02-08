@@ -11,7 +11,7 @@ export default class FarmCard extends React.Component {
     this.graphPointsData = {
       labels: [],
       data: [],
-      barColors: ['#a4c9de']
+      barColors: ['#6da2bf']
     };
     this.state = {
       loading: true,

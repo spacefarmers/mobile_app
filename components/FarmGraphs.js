@@ -1,5 +1,5 @@
 import React from "react";
-import { Center, ScrollView, Box, Spinner, Text } from "native-base";
+import { Center, ScrollView, Box, Spinner, Text, Row, Column } from "native-base";
 import { LineChart, StackedBarChart } from "react-native-chart-kit";
 import { Dimensions } from "react-native";
 
@@ -11,19 +11,20 @@ export default class FarmGraphs extends React.Component {
       datasets: [
         {
           data: [],
-          color: (opacity) => 'rgba(164, 201, 222, 1)',
-        }
+          color: (opacity) => "rgba(109, 162, 191, 1)",
+        },
       ],
     };
     this.pointsChart = {
       labels: [],
       data: [],
-      barColors: ['#a4c9de']
+      barColors: ["#6da2bf"],
     };
     this.partialsChart = {
       labels: [],
+      legend: [],
       data: [],
-      barColors: []
+      barColors: [],
     };
     this.state = {
       pointsChartLoading: true,
@@ -38,17 +39,14 @@ export default class FarmGraphs extends React.Component {
     this.getSizeChart();
   }
 
-  async componentDidUpdate(prevProps, prevState) {
-  }
+  async componentDidUpdate(prevProps, prevState) {}
 
   async getSizeChart() {
     const response = await fetch(
       "https://spacefarmers.io/api/graphs/farmer/size_24h/" + this.props.farmId
     );
     const data = await response.json();
-    this.sizeChart.datasets[0].data = data
-      .slice(-72)
-      .map((x) => x["value"]);
+    this.sizeChart.datasets[0].data = data.slice(-72).map((x) => x["value"]);
     this.sizeChart.labels = data.slice(-72).map((x) => {
       const date = new Date(x["timestamp"] * 1000);
       const hour = date.getHours();
@@ -66,9 +64,7 @@ export default class FarmGraphs extends React.Component {
     );
     const data = await response.json();
     data.reverse();
-    this.pointsChart.data = data
-      .slice(-72)
-      .map((x) => [x["value"]]);
+    this.pointsChart.data = data.slice(-72).map((x) => [x["value"]]);
     this.pointsChart.labels = data.slice(-72).map((x) => {
       const date = new Date(x["timestamp"] * 1000);
       const hour = date.getHours();
@@ -79,14 +75,14 @@ export default class FarmGraphs extends React.Component {
     });
     this.setState({ pointsChartLoading: false });
   }
-  
+
   async getPartialsChart() {
     const response = await fetch(
       "https://spacefarmers.io/api/graphs/farmer/partials/" + this.props.farmId
     );
     const data = await response.json();
     data.forEach((dataArray, dataIndex) => {
-      let reversedData = dataArray.data.reverse().slice(-72)
+      let reversedData = dataArray.data.reverse().slice(-72);
       reversedData.forEach((chartData, index) => {
         if (dataIndex == 0) {
           this.partialsChart.data[index] = [chartData.value];
@@ -94,7 +90,10 @@ export default class FarmGraphs extends React.Component {
           this.partialsChart.data[index][dataIndex] = chartData.value;
         }
       });
-      this.partialsChart.barColors.push(dataArray.color.replace('fff', 'a4c9de'))
+      this.partialsChart.barColors.push(
+        this.partialColor(dataArray.status_code)
+      );
+      this.partialsChart.legend.push(dataArray.status_text);
     });
     this.partialsChart.labels = data[0].data.slice(-72).map((x) => {
       const date = new Date(x["timestamp"] * 1000);
@@ -106,7 +105,15 @@ export default class FarmGraphs extends React.Component {
     });
     this.setState({ partialsChartLoading: false });
   }
-  
+
+  partialColor(code) {
+    var colors = {};
+    colors[0] = "#6da2bf";
+    colors[2] = "#f5cc00";
+    colors[100] = "#575366";
+    return colors[code] || "#C20114";
+  }
+
   render() {
     return (
       <ScrollView py="4">
@@ -137,10 +144,9 @@ export default class FarmGraphs extends React.Component {
                 ) : (
                   <LineChart
                     data={this.sizeChart}
-                    width={Math.min(
-                      800,
-                      Dimensions.get("window").width * 0.85
-                    ) + 20}
+                    width={
+                      Math.min(800, Dimensions.get("window").width * 0.85) + 20
+                    }
                     height={250}
                     yAxisInterval={10} // optional, defaults to 1
                     xLabelsOffset={-10}
@@ -150,10 +156,8 @@ export default class FarmGraphs extends React.Component {
                       backgroundColor: "#fafafa",
                       backgroundGradientFrom: "#fafafa",
                       backgroundGradientTo: "#fafafa",
-                      color: (opacity = 1) =>
-                        `rgba(1, 82, 126, ${opacity})`,
-                      labelColor: (opacity = 1) =>
-                        `rgba(0, 0, 0, ${opacity})`,
+                      color: (opacity = 1) => `rgba(1, 82, 126, ${opacity})`,
+                      labelColor: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
                       strokeWidth: 2, // optional, default 3
                       barPercentage: 0.1,
                       decimalPlaces: 0,
@@ -175,9 +179,9 @@ export default class FarmGraphs extends React.Component {
                 px="3"
                 py="1.5"
                 maxW="220"
-                color= "white"
-                fontWeight= "700"
-                fontSize= "xs"
+                color="white"
+                fontWeight="700"
+                fontSize="xs"
                 numberOfLines={1}
                 ellipsizeMode={"middle"}
               >
@@ -210,10 +214,9 @@ export default class FarmGraphs extends React.Component {
                 ) : (
                   <StackedBarChart
                     data={this.pointsChart}
-                    width={Math.min(
-                      800,
-                      Dimensions.get("window").width * 0.85
-                    ) + 20}
+                    width={
+                      Math.min(800, Dimensions.get("window").width * 0.85) + 20
+                    }
                     height={250}
                     yAxisInterval={10} // optional, defaults to 1
                     fromZero={true}
@@ -224,10 +227,8 @@ export default class FarmGraphs extends React.Component {
                       backgroundColor: "#fafafa",
                       backgroundGradientFrom: "#fafafa",
                       backgroundGradientTo: "#fafafa",
-                      color: (opacity = 1) =>
-                        `rgba(1, 82, 126, ${opacity})`,
-                      labelColor: (opacity = 1) =>
-                        `rgba(0, 0, 0, ${opacity})`,
+                      color: (opacity = 1) => `rgba(1, 82, 126, ${opacity})`,
+                      labelColor: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
                       strokeWidth: 2, // optional, default 3
                       barPercentage: 0.1,
                     }}
@@ -248,9 +249,9 @@ export default class FarmGraphs extends React.Component {
                 px="3"
                 py="1.5"
                 maxW="220"
-                color= "white"
-                fontWeight= "700"
-                fontSize= "xs"
+                color="white"
+                fontWeight="700"
+                fontSize="xs"
                 numberOfLines={1}
                 ellipsizeMode={"middle"}
               >
@@ -283,10 +284,9 @@ export default class FarmGraphs extends React.Component {
                 ) : (
                   <StackedBarChart
                     data={this.partialsChart}
-                    width={Math.min(
-                      800,
-                      Dimensions.get("window").width * 0.85
-                    ) + 20}
+                    width={
+                      Math.min(800, Dimensions.get("window").width * 0.85) + 20
+                    }
                     height={250}
                     yAxisInterval={10} // optional, defaults to 1
                     fromZero={true}
@@ -296,10 +296,8 @@ export default class FarmGraphs extends React.Component {
                       backgroundColor: "#fafafa",
                       backgroundGradientFrom: "#fafafa",
                       backgroundGradientTo: "#fafafa",
-                      color: (opacity = 1) =>
-                        `rgba(1, 82, 126, ${opacity})`,
-                      labelColor: (opacity = 1) =>
-                        `rgba(0, 0, 0, ${opacity})`,
+                      color: (opacity = 1) => `rgba(1, 82, 126, ${opacity})`,
+                      labelColor: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
                       strokeWidth: 2, // optional, default 3
                       barPercentage: 0.1,
                     }}
@@ -321,14 +319,33 @@ export default class FarmGraphs extends React.Component {
                 px="3"
                 py="1.5"
                 maxW="220"
-                color= "white"
-                fontWeight= "700"
-                fontSize= "xs"
+                color="white"
+                fontWeight="700"
+                fontSize="xs"
                 numberOfLines={1}
                 ellipsizeMode={"middle"}
               >
                 Partials
               </Text>
+
+              <Center>
+                <Column pb="3" space="3">
+                  {this.partialsChart.legend.map((label, index) => {
+                    return (
+                      <Row space="3" key={label}>
+                        <Center
+                          h="5"
+                          w="5"
+                          bg={this.partialsChart.barColors[index]}
+                          rounded="md"
+                          shadow={3}
+                        />
+                        <Text>{label}</Text>
+                      </Row>
+                    );
+                  })}
+                </Column>
+              </Center>
             </Box>
           </Box>
         </Center>
