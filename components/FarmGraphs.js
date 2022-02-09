@@ -10,7 +10,7 @@ import {
   Heading,
 } from "native-base";
 import { LineChart, StackedBarChart } from "react-native-chart-kit";
-import { Dimensions } from "react-native";
+import { Dimensions, RefreshControl } from "react-native";
 
 export default class FarmGraphs extends React.Component {
   constructor(props) {
@@ -43,12 +43,17 @@ export default class FarmGraphs extends React.Component {
   }
 
   async componentDidMount() {
+    this.getGraphs();
+  }
+
+  async getGraphs() {
     this.getPointsChart();
     this.getPartialsChart();
     this.getSizeChart();
   }
 
   async getSizeChart() {
+    this.setState({ sizeChartLoading: true });
     const response = await fetch(
       "https://spacefarmers.io/api/graphs/farmer/size_24h/" + this.props.farmId
     );
@@ -66,6 +71,7 @@ export default class FarmGraphs extends React.Component {
   }
 
   async getPointsChart() {
+    this.setState({ pointsChartLoading: true });
     const response = await fetch(
       "https://spacefarmers.io/api/graphs/farmer/points/" + this.props.farmId
     );
@@ -84,10 +90,12 @@ export default class FarmGraphs extends React.Component {
   }
 
   async getPartialsChart() {
+    this.setState({ partialsChartLoading: true });
     const response = await fetch(
       "https://spacefarmers.io/api/graphs/farmer/partials/" + this.props.farmId
     );
     const data = await response.json();
+    this.partialsChart.legend = [];
     data.forEach((dataArray, dataIndex) => {
       let reversedData = dataArray.data.reverse().slice(-72);
       reversedData.forEach((chartData, index) => {
@@ -123,10 +131,24 @@ export default class FarmGraphs extends React.Component {
 
   render() {
     return (
-      <ScrollView py="4">
+      <ScrollView
+        py="4"
+        refreshControl={
+          <RefreshControl
+            refreshing={
+              this.state.partialsChartLoading ||
+              this.state.pointsChartLoading ||
+              this.state.sizeChartLoading
+            }
+            onRefresh={this.getGraphs.bind(this)}
+          />
+        }
+      >
         <Center>
           <Box maxW="1000" w="95%">
-            <Heading pl="2" size="md">Graphs</Heading>
+            <Heading pl="2" size="md">
+              Graphs
+            </Heading>
             <Box
               my="3"
               rounded="lg"
@@ -147,7 +169,7 @@ export default class FarmGraphs extends React.Component {
               }}
             >
               <Center mt="7" minHeight="250">
-                {this.state.sizeChartLoading ? (
+                {this.sizeChart.labels.length == 0 ? (
                   <Spinner flex={1} py="4" />
                 ) : (
                   <LineChart
@@ -217,7 +239,7 @@ export default class FarmGraphs extends React.Component {
               }}
             >
               <Center mt="7" minHeight="250">
-                {this.state.pointsChartLoading ? (
+                {this.pointsChart.labels.length == 0 ? (
                   <Spinner flex={1} py="4" />
                 ) : (
                   <StackedBarChart
@@ -287,7 +309,7 @@ export default class FarmGraphs extends React.Component {
               }}
             >
               <Center mt="7" minHeight="250">
-                {this.state.partialsChartLoading ? (
+                {this.partialsChart.labels.length == 0 ? (
                   <Spinner flex={1} py="4" />
                 ) : (
                   <StackedBarChart
