@@ -178,7 +178,7 @@ export default class FarmGraphs extends React.Component {
                       Math.min(800, Dimensions.get("window").width * 0.85) + 20
                     }
                     height={250}
-                    yAxisInterval={10} // optional, defaults to 1
+                    withVerticalLines={false} // optional, defaults to 1
                     xLabelsOffset={-10}
                     fromZero={true}
                     withDots={false}
