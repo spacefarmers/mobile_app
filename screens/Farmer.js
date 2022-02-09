@@ -3,15 +3,13 @@ import {
   Box,
   ScrollView,
   Center,
-  Text,
   Heading,
   Spinner,
-  Button,
   Icon,
 } from "native-base";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { View, useWindowDimensions } from "react-native";
-import { TabView, TabBar, SceneMap } from "react-native-tab-view";
+import { useWindowDimensions } from "react-native";
+import { TabView, TabBar } from "react-native-tab-view";
 import FarmDetails from "../components/FarmDetails";
 import FarmGraphs from "../components/FarmGraphs";
 import FarmPartials from "../components/FarmPartials";
@@ -79,13 +77,20 @@ export default function FarmScreen({ route }) {
     </ScrollView>
   );
 
-  const renderScene = SceneMap({
-    details: () => <FarmDetails farm={farm} />,
-    graphs: () => <FarmGraphs farmId={farmId} />,
-    partials: () => <FarmPartials farmId={farmId} />,
-    payouts: wipRoute,
-    blocks: wipRoute,
-  });
+  const renderScene = ({route}) => {
+    switch (route.key) {
+      case 'details':
+        return <FarmDetails farm={farm} />;
+      case 'partials':
+        return <FarmPartials farmId={farmId} />;
+      case 'graphs':
+        return <FarmGraphs farmId={farmId} />;
+      case 'payouts':
+        return wipRoute();
+      case 'blocks':
+        return wipRoute();
+    }
+  };
 
   const layout = useWindowDimensions();
 
