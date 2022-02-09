@@ -1,24 +1,28 @@
 import React from "react";
 import {
-  Button,
   Center,
   ScrollView,
   Box,
   Heading,
   Text,
-  Spinner,
+  Skeleton,
   HStack,
   VStack,
   Spacer,
 } from "native-base";
+import { RefreshControl } from 'react-native';
 
 export default class FarmPartials extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { partialsLoading: true, partials: [] };
+    this.state = { partialsLoading: true, partials: undefined };
   }
 
   async componentDidMount() {
+    this.getPartials();
+  }
+
+  async getPartials() {
     this.setState({ partialsLoading: true });
     const response = await fetch(
       "https://spacefarmers.io/api/farmers/" + this.props.farmId + "/partials"
@@ -29,10 +33,20 @@ export default class FarmPartials extends React.Component {
 
   render() {
     return (
-      <ScrollView py="4">
+      <ScrollView
+        py="4"
+        refreshControl={
+          <RefreshControl
+            refreshing={this.state.partialsLoading}
+            onRefresh={this.getPartials.bind(this)}
+          />
+        }
+      >
         <Center>
           <Box maxW="1000" w="95%">
-            <Heading pl="2" size="md">Partials</Heading>
+            <Heading pl="2" size="md">
+              Partials
+            </Heading>
             <Box
               p="3"
               mt="3"
@@ -54,8 +68,13 @@ export default class FarmPartials extends React.Component {
                 backgroundColor: "gray.50",
               }}
             >
-              {this.state.partialsLoading ? (
-                <Spinner flex={1} py="4" />
+              {this.state.partials == undefined ? (
+                <Box>
+                  <Skeleton.Text p="4" lines="2" />
+                  <Skeleton.Text p="4" lines="2" />
+                  <Skeleton.Text p="4" lines="2" />
+                  <Skeleton.Text p="4" lines="2" />
+                </Box>
               ) : (
                 this.state.partials.map((partial, index) => {
                   return (
