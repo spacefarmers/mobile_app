@@ -13,6 +13,7 @@ import { TabView, TabBar } from "react-native-tab-view";
 import FarmDetails from "../components/FarmDetails";
 import FarmGraphs from "../components/FarmGraphs";
 import FarmPartials from "../components/FarmPartials";
+import FarmPayouts from "../components/FarmPayouts";
 
 export default function FarmScreen({ route }) {
   const { farmId } = route.params;
@@ -86,7 +87,7 @@ export default function FarmScreen({ route }) {
       case 'graphs':
         return <FarmGraphs farmId={farmId} />;
       case 'payouts':
-        return wipRoute();
+        return <FarmPayouts farmId={farmId} />;
       case 'blocks':
         return wipRoute();
     }

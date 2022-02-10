@@ -4,13 +4,14 @@ import {
   ScrollView,
   Box,
   Heading,
-  Text,
   Skeleton,
   HStack,
   VStack,
   Spacer,
+  Text,
 } from "native-base";
-import { RefreshControl } from 'react-native';
+import { RefreshControl } from "react-native";
+import moment from "moment";
 
 export default class FarmPartials extends React.Component {
   constructor(props) {
@@ -92,9 +93,7 @@ export default class FarmPartials extends React.Component {
                       <HStack space="3">
                         <VStack>
                           <Text bold>
-                            {new Date(
-                              partial.attributes.timestamp * 1000
-                            ).toLocaleString()}
+                            {moment(new Date(partial.attributes.timestamp * 1000)).format("DD/MM/YYYY HH:mm:ss")}
                           </Text>
                           <Text>
                             Harvester:{" "}
