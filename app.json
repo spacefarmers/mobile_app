@@ -18,12 +18,12 @@
     ],
     "ios": {
       "bundleIdentifier": "com.spacefarmers.chiapool",
-      "buildNumber": "0.0.1",
+      "buildNumber": "0.0.2",
       "supportsTablet": true
     },
     "android": {
       "package": "com.spacefarmers.chiapool",
-      "versionCode": 6,
+      "versionCode": 7,
       "permissions": [],
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
