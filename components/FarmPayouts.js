@@ -128,17 +128,17 @@ export default class FarmPayouts extends React.Component {
                         </VStack>
                         {payout.attributes.transaction_id != "" ? (
                           <Icon
-                            mt="2"
+                            mt="3"
                             as={MaterialCommunityIcons}
                             name="check"
-                            size="sm"
+                            size="4"
                           />
                         ) : (
                           <Icon
-                            mt="2"
+                            mt="3"
                             as={MaterialCommunityIcons}
                             name="check"
-                            size="sm"
+                            size="4"
                           />
                         )}
                       </HStack>
