@@ -14,6 +14,7 @@ import FarmDetails from "../components/FarmDetails";
 import FarmGraphs from "../components/FarmGraphs";
 import FarmPartials from "../components/FarmPartials";
 import FarmPayouts from "../components/FarmPayouts";
+import FarmBlocks from "../components/FarmBlocks";
 
 export default function FarmScreen({ route }) {
   const { farmId } = route.params;
@@ -43,41 +44,6 @@ export default function FarmScreen({ route }) {
     setLoading(false);
   }
 
-
-  const wipRoute = () => (
-    <ScrollView py="4">
-      <Center>
-        <Box maxW="1000" w="95%">
-          <Box
-            p="3"
-            mt="3"
-            rounded="lg"
-            overflow="hidden"
-            borderColor="coolGray.200"
-            borderWidth="1"
-            minHeight="300"
-            mb="3"
-            _dark={{
-              borderColor: "coolGray.600",
-              backgroundColor: "gray.700",
-            }}
-            _web={{
-              shadow: 2,
-              borderWidth: 0,
-            }}
-            _light={{
-              backgroundColor: "gray.50",
-            }}
-          >
-            <Center>
-              <Heading size="md">This page is work in progress</Heading>
-            </Center>
-          </Box>
-        </Box>
-      </Center>
-    </ScrollView>
-  );
-
   const renderScene = ({route}) => {
     switch (route.key) {
       case 'details':
@@ -89,7 +55,7 @@ export default function FarmScreen({ route }) {
       case 'payouts':
         return <FarmPayouts farmId={farmId} />;
       case 'blocks':
-        return wipRoute();
+        return <FarmBlocks farmId={farmId} />;
     }
   };
 

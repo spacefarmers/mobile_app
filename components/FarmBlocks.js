@@ -4,32 +4,34 @@ import {
   ScrollView,
   Box,
   Heading,
+  Text,
   Skeleton,
   HStack,
   VStack,
   Spacer,
-  Text,
+  Icon,
 } from "native-base";
 import { RefreshControl } from "react-native";
+import NumberFormat from "react-number-format";
 import moment from "moment";
 
-export default class FarmPartials extends React.Component {
+export default class FarmBlocks extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { loading: true, partials: undefined };
+    this.state = { loading: true, blocks: undefined };
   }
 
   async componentDidMount() {
-    this.getPartials();
+    this.getBlocks();
   }
 
-  async getPartials() {
+  async getBlocks() {
     this.setState({ loading: true });
     const response = await fetch(
-      "https://spacefarmers.io/api/farmers/" + this.props.farmId + "/partials"
+      "https://spacefarmers.io/api/farmers/" + this.props.farmId + "/blocks"
     );
     const json = await response.json();
-    this.setState({ partials: json.data, loading: false });
+    this.setState({ blocks: json.data, loading: false });
   }
 
   render() {
@@ -40,7 +42,7 @@ export default class FarmPartials extends React.Component {
         refreshControl={
           <RefreshControl
             refreshing={this.state.loading}
-            onRefresh={this.getPartials.bind(this)}
+            onRefresh={this.getBlocks.bind(this)}
           />
         }
         stickyHeaderIndices={[0]}
@@ -48,7 +50,7 @@ export default class FarmPartials extends React.Component {
         <Center>
           <Box backgroundColor="gray.100" maxW="1000" w="95%">
             <Heading pl="2" size="md">
-              Partials
+              Payouts
             </Heading>
             <Box
               px="3"
@@ -59,22 +61,20 @@ export default class FarmPartials extends React.Component {
               borderColor="coolGray.200"
               borderWidth="1"
             >
-              <Box pl="4" pr="5" backgroundColor="coolGray.50">
+              <Box
+                pl="4"
+                pr="5"
+                backgroundColor="coolGray.50"
+              >
                 <HStack space="3">
                   <VStack>
-                    <Text color="primary.600" bold>
-                      Date
-                    </Text>
-                    <Text color="primary.600">Harvester</Text>
+                    <Text color="primary.600" bold>Date</Text>
+                    <Text color="primary.600">Block</Text>
                   </VStack>
                   <Spacer />
                   <VStack>
-                    <Text color="primary.600" bold textAlign="right">
-                      Status
-                    </Text>
-                    <Text color="primary.600" textAlign="right">
-                      Points
-                    </Text>
+                    <Text color="primary.600" bold textAlign="right">Farmer effort</Text>
+                    <Text color="primary.600" textAlign="right">Pool reward</Text>
                   </VStack>
                 </HStack>
               </Box>
@@ -91,7 +91,7 @@ export default class FarmPartials extends React.Component {
               borderWidth="1"
               mb="3"
             >
-              {this.state.partials == undefined ? (
+              {this.state.blocks == undefined ? (
                 <Box>
                   <Skeleton.Text p="4" lines="2" />
                   <Skeleton.Text p="4" lines="2" />
@@ -99,10 +99,10 @@ export default class FarmPartials extends React.Component {
                   <Skeleton.Text p="4" lines="2" />
                 </Box>
               ) : (
-                this.state.partials.map((partial, index) => {
+                this.state.blocks.map((block, index) => {
                   return (
                     <Box
-                      key={partial.id}
+                      key={block.id}
                       borderBottomWidth="1"
                       _dark={{
                         borderColor: "gray.600",
@@ -116,22 +116,36 @@ export default class FarmPartials extends React.Component {
                         <VStack>
                           <Text bold>
                             {moment(
-                              new Date(partial.attributes.timestamp * 1000)
-                            ).format("DD/MM/YYYY HH:mm:ss")}
+                              new Date(block.attributes.timestamp * 1000)
+                            ).format("DD/MM/YYYY HH:mm")}
                           </Text>
-                          <Text>
-                            {partial.attributes.harvester_name ||
-                              partial.attributes.harvester_id}
-                          </Text>
+                          <Text>{block.attributes.height}</Text>
                         </VStack>
                         <Spacer />
                         <VStack>
-                          <Text textAlign="right" bold>
-                            {partial.attributes.error_code}
-                          </Text>
-                          <Text textAlign="right">
-                            {partial.attributes.points}
-                          </Text>
+                          <NumberFormat
+                            value={block.attributes.farmer_effort}
+                            displayType={"text"}
+                            decimalScale={2}
+                            fixedDecimalScale={true}
+                            thousandSeparator={true}
+                            suffix=" %"
+                            renderText={(value) => (
+                              <Text bold textAlign="right">
+                                {value}
+                              </Text>
+                            )}
+                          />
+                          <NumberFormat
+                            value={block.attributes.amount / 10 ** 12}
+                            displayType={"text"}
+                            suffix=" XCH"
+                            decimalScale={2}
+                            fixedDecimalScale={true}
+                            renderText={(value) => (
+                              <Text textAlign="right">{value}</Text>
+                            )}
+                          />
                         </VStack>
                       </HStack>
                     </Box>

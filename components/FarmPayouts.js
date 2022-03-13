@@ -19,7 +19,7 @@ import moment from "moment";
 export default class FarmPayouts extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { payoutsLoading: true, payouts: undefined };
+    this.state = { loading: true, payouts: undefined };
   }
 
   async componentDidMount() {
@@ -27,51 +27,80 @@ export default class FarmPayouts extends React.Component {
   }
 
   async getPayouts() {
-    this.setState({ payoutsLoading: true });
+    this.setState({ loading: true });
     const response = await fetch(
       "https://spacefarmers.io/api/farmers/" + this.props.farmId + "/payouts"
     );
     const json = await response.json();
     console.log(json);
-    this.setState({ payouts: json.data, payoutsLoading: false });
+    this.setState({ payouts: json.data, loading: false });
   }
 
   render() {
     return (
       <ScrollView
-        py="4"
+        mt="2"
+        mb="4"
         refreshControl={
           <RefreshControl
-            refreshing={this.state.payoutsLoading}
+            refreshing={this.state.loading}
             onRefresh={this.getPayouts.bind(this)}
           />
         }
+        stickyHeaderIndices={[0]}
       >
         <Center>
-          <Box maxW="1000" w="95%">
+          <Box backgroundColor="gray.100" maxW="1000" w="95%">
             <Heading pl="2" size="md">
               Payouts
             </Heading>
             <Box
-              p="3"
+              px="3"
+              py="1"
               mt="3"
-              rounded="lg"
               overflow="hidden"
+              backgroundColor="gray.50"
               borderColor="coolGray.200"
               borderWidth="1"
-              minHeight="300"
+            >
+              <Box pl="4" pr="5" backgroundColor="gray.50">
+                <HStack space="3">
+                  <VStack>
+                    <Text color="primary.600" bold>
+                      Date
+                    </Text>
+                    <Text color="primary.600">Block</Text>
+                  </VStack>
+                  <Spacer />
+                  <VStack>
+                    <Text color="primary.600" bold textAlign="right">
+                      XCH
+                    </Text>
+                    <Text color="primary.600" textAlign="right">
+                      Dollars
+                    </Text>
+                  </VStack>
+                  <Icon
+                    mt="3"
+                    as={MaterialCommunityIcons}
+                    name="information-outline"
+                    color="primary.600"
+                    size="4"
+                  />
+                </HStack>
+              </Box>
+            </Box>
+          </Box>
+        </Center>
+        <Center>
+          <Box maxW="1000" w="95%">
+            <Box
+              px="3"
+              overflow="hidden"
+              backgroundColor="gray.50"
+              borderColor="coolGray.200"
+              borderWidth="1"
               mb="3"
-              _dark={{
-                borderColor: "coolGray.600",
-                backgroundColor: "gray.700",
-              }}
-              _web={{
-                shadow: 2,
-                borderWidth: 0,
-              }}
-              _light={{
-                backgroundColor: "gray.50",
-              }}
             >
               {this.state.payouts == undefined ? (
                 <Box>
@@ -101,7 +130,7 @@ export default class FarmPayouts extends React.Component {
                               new Date(payout.attributes.timestamp * 1000)
                             ).format("DD/MM/YYYY HH:mm")}
                           </Text>
-                          <Text>Block: {payout.attributes.height}</Text>
+                          <Text>{payout.attributes.height}</Text>
                         </VStack>
                         <Spacer />
                         <VStack>
@@ -111,7 +140,11 @@ export default class FarmPayouts extends React.Component {
                             suffix=" XCH"
                             decimalScale={12}
                             fixedDecimalScale={true}
-                            renderText={value => <Text bold textAlign="right">{value}</Text>}
+                            renderText={(value) => (
+                              <Text bold textAlign="right">
+                                {value}
+                              </Text>
+                            )}
                           />
                           <NumberFormat
                             value={
@@ -123,7 +156,9 @@ export default class FarmPayouts extends React.Component {
                             fixedDecimalScale={true}
                             thousandSeparator={true}
                             prefix={"$ "}
-                            renderText={value => <Text textAlign="right">{value}</Text>}
+                            renderText={(value) => (
+                              <Text textAlign="right">{value}</Text>
+                            )}
                           />
                         </VStack>
                         {payout.attributes.transaction_id != "" ? (
