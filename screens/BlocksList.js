@@ -46,7 +46,7 @@ export default function BlockListScreen({ navigation }) {
           px="4"
           py="2"
         >
-          <Text w="130" numberOfLines={1} bold>
+          <Text w="120" numberOfLines={1} bold>
             Block
           </Text>
           <Text bold>
@@ -66,9 +66,10 @@ export default function BlockListScreen({ navigation }) {
             renderItem={({ item }) => (
               <TouchableHighlight
                 underlayColor="rgba(6, 182, 212, 0.1)"
-                onPress={() =>
-                  navigation.navigate("Block", { blockID: item.id })
-                }
+                onPress={() => (
+                  // navigation.navigate("Block", { blockID: item.id })
+                  console.log("TODO")
+                )}
               >
                 <Box
                   flex={1}
@@ -81,21 +82,21 @@ export default function BlockListScreen({ navigation }) {
                   py="2"
                 >
                   <HStack flex={1} space={3} justifyContent="space-between">
-                    <VStack w="130" >
+                    <VStack w="120" >
                       <Text numberOfLines={1} bold>
                         {item.attributes.height}
                       </Text>
-                      <Text numberOfLines={1} ellipsizeMode="middle">
+                      <Text numberOfLines={1}>
                         {moment(
                           new Date(item.attributes.timestamp * 1000)
                         ).format("DD/MM/YYYY HH:mm")}
                       </Text>
                     </VStack>
                     <VStack flex={1}>
-                      <Text bold>
+                      <Text numberOfLines={1} bold>
                         {item.attributes.farmer_name}
                       </Text>
-                      <Text>
+                      <Text numberOfLines={1} ellipsizeMode="middle">
                       {item.attributes.farmed_launcher_id}
                       </Text>
                     </VStack>
