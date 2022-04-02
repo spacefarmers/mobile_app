@@ -50,7 +50,7 @@ export default class FarmBlocks extends React.Component {
         <Center>
           <Box backgroundColor="gray.100" maxW="1000" w="95%">
             <Heading pl="2" size="md">
-              Payouts
+              Blocks
             </Heading>
             <Box
               px="3"
