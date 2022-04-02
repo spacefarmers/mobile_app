@@ -8,6 +8,7 @@ import DashboardScreen from "./screens/Dashboard";
 import WorkInProgressScreen from "./screens/WorkInProgress";
 import FarmersListScreen from "./screens/FarmersList";
 import FarmerScreen from "./screens/Farmer";
+import BlocksListScreen from "./screens/BlocksList";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import {
   NativeBaseProvider,
@@ -156,7 +157,7 @@ export default function App() {
             options={{ headerRight: filterFarmers }}
           />
           <Drawer.Screen name="Farmer" component={FarmerScreen} />
-          <Drawer.Screen name="Blocks" component={WorkInProgressScreen} />
+          <Drawer.Screen name="Blocks" component={BlocksListScreen} />
           <Drawer.Screen name="Pool status" component={WorkInProgressScreen} />
         </Drawer.Navigator>
       </NavigationContainer>
