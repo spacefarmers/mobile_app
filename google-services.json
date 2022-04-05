@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "560775559095",
+    "project_id": "spacefarmers-8a7dc",
+    "storage_bucket": "spacefarmers-8a7dc.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:560775559095:android:72643464e3dfc233dada32",
+        "android_client_info": {
+          "package_name": "com.spacefarmers.chiapool"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "560775559095-mu3pb3k01f5j7c3i23at9v2m5klf095v.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAlou2k5WGh6K9Udi-wg8bOjfoVre12JLg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "560775559095-mu3pb3k01f5j7c3i23at9v2m5klf095v.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

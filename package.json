@@ -17,6 +17,7 @@
     "@types/react": "*",
     "@types/react-native": "*",
     "expo": "~43.0.0",
+    "expo-notifications": "~0.13.3",
     "expo-status-bar": "~1.1.0",
     "moment": "^2.29.1",
     "native-base": "^3.3.0",
