@@ -10,6 +10,9 @@
       "resizeMode": "contain",
       "backgroundColor": "#000000"
     },
+    "notification": {
+      "icon": "./assets/android_96x.png"
+    },
     "updates": {
       "fallbackToCacheTimeout": 0
     },
@@ -18,12 +21,12 @@
     ],
     "ios": {
       "bundleIdentifier": "com.spacefarmers.chiapool",
-      "buildNumber": "0.0.3",
+      "buildNumber": "0.0.4",
       "supportsTablet": true
     },
     "android": {
       "package": "com.spacefarmers.chiapool",
-      "versionCode": 9,
+      "versionCode": 10,
       "permissions": [],
       "googleServicesFile": "./google-services.json",
       "adaptiveIcon": {
