@@ -55,7 +55,7 @@ export default class FarmGraphs extends React.Component {
   async getSizeChart() {
     this.setState({ sizeChartLoading: true });
     const response = await fetch(
-      "https://spacefarmers.io/api/graphs/farmer/size_24h/" + this.props.farmId
+      global.API_URL + "/api/graphs/farmer/size_24h/" + this.props.farmId
     );
     const data = await response.json();
     this.sizeChart.datasets[0].data = data.slice(-72).map((x) => x["value"]);
@@ -73,7 +73,7 @@ export default class FarmGraphs extends React.Component {
   async getPointsChart() {
     this.setState({ pointsChartLoading: true });
     const response = await fetch(
-      "https://spacefarmers.io/api/graphs/farmer/points/" + this.props.farmId
+      global.API_URL + "/api/graphs/farmer/points/" + this.props.farmId
     );
     const data = await response.json();
     data.reverse();
@@ -92,7 +92,7 @@ export default class FarmGraphs extends React.Component {
   async getPartialsChart() {
     this.setState({ partialsChartLoading: true });
     const response = await fetch(
-      "https://spacefarmers.io/api/graphs/farmer/partials/" + this.props.farmId
+      global.API_URL + "/api/graphs/farmer/partials/" + this.props.farmId
     );
     const data = await response.json();
     this.partialsChart.legend = [];

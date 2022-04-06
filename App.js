@@ -11,6 +11,7 @@ import BlocksListScreen from "./screens/BlocksList";
 import PoolStatusScreen from "./screens/PoolStatus";
 import NotificationsScreen from "./screens/Notification";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
+import * as Notifications from 'expo-notifications';
 import {
   NativeBaseProvider,
   Pressable,
@@ -24,6 +25,16 @@ import {
   Box,
 } from "native-base";
 import {TouchableOpacity, DeviceEventEmitter} from "react-native"
+
+global.API_URL = process.env.API_URL || 'https://spacefarmers.io';
+
+Notifications.setNotificationHandler({
+  handleNotification: async () => ({
+    shouldShowAlert: true,
+    shouldPlaySound: false,
+    shouldSetBadge: false,
+  }),
+});
 
 const Drawer = createDrawerNavigator();
 

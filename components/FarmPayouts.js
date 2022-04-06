@@ -29,7 +29,7 @@ export default class FarmPayouts extends React.Component {
   async getPayouts() {
     this.setState({ loading: true });
     const response = await fetch(
-      "https://spacefarmers.io/api/farmers/" + this.props.farmId + "/payouts"
+      global.API_URL + "/api/farmers/" + this.props.farmId + "/payouts"
     );
     const json = await response.json();
     console.log(json);

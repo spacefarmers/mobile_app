@@ -37,7 +37,7 @@ export default function FarmScreen({ route }) {
   async function getFarm() {
     setLoading(true);
     const response = await fetch(
-      "https://spacefarmers.io/api/farmers/" + farmId
+      global.API_URL + "/api/farmers/" + farmId
     );
     const json = await response.json();
     setFarm(json.data);

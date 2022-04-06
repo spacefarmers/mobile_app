@@ -23,7 +23,7 @@ export default function PoolStatusScreen({ navigation }) {
 
   async function getPointsChart() {
     setPointsChartLoading(true);
-    const response = await fetch("https://spacefarmers.io/api/graphs/pool/points/");
+    const response = await fetch(global.API_URL + "/api/graphs/pool/points/");
     const data = await response.json();
     data.reverse();
     setPointsChart((chart) => {

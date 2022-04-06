@@ -37,7 +37,7 @@ export default function FarmersListScreen({ navigation }) {
 
   async function getFarms() {
     setLoading(true);
-    let url = "https://spacefarmers.io/api/farmers/?page=" + page;
+    let url = global.API_URL + "/api/farmers/?page=" + page;
     if (searchQuery != "") url = url + "&search=" + searchQuery;
     const response = await fetch(url);
     const json = await response.json();

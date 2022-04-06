@@ -28,7 +28,7 @@ export default class FarmBlocks extends React.Component {
   async getBlocks() {
     this.setState({ loading: true });
     const response = await fetch(
-      "https://spacefarmers.io/api/farmers/" + this.props.farmId + "/blocks"
+      global.API_URL + "/api/farmers/" + this.props.farmId + "/blocks"
     );
     const json = await response.json();
     this.setState({ blocks: json.data, loading: false });

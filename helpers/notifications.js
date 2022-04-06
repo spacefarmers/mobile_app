@@ -1,0 +1,59 @@
+import Constants from 'expo-constants';
+import * as Notifications from 'expo-notifications';
+import { Platform } from 'react-native';
+
+export async function getExpoToken() {
+    let token;
+    if (Constants.isDevice) {
+        const { status: existingStatus } = await Notifications.getPermissionsAsync();
+        let finalStatus = existingStatus;
+        if (existingStatus !== 'granted') {
+            const { status } = await Notifications.requestPermissionsAsync();
+            finalStatus = status;
+        }
+        if (finalStatus !== 'granted') {
+            throw Error('Failed to get push token for push notification!');
+        }
+        token = (await Notifications.getExpoPushTokenAsync()).data;
+    } else {
+        throw Error('Must use physical device for Push Notifications');
+    }
+
+    if (Platform.OS === 'android') {
+        Notifications.setNotificationChannelAsync('default', {
+            name: 'default',
+            importance: Notifications.AndroidImportance.MAX,
+            vibrationPattern: [0, 250, 250, 250],
+            lightColor: '#FF231F7C',
+        });
+    }
+
+    return token;
+}
+
+export async function updateNotificationToken(token, data) {
+    await fetch(global.API_URL + "/api/notifications", {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        token: token,
+        ...data
+      }),
+    })
+    .then(handleErrors)
+    .then(response => {
+      return response;
+    })
+    .catch(error => {
+      throw error;
+    });
+  }
+  
+function handleErrors(response) {
+    if (!response.ok) {
+        throw Error(response.statusText);
+    }
+    return response;
+}

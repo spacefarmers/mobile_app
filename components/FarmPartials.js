@@ -26,7 +26,7 @@ export default class FarmPartials extends React.Component {
   async getPartials() {
     this.setState({ loading: true });
     const response = await fetch(
-      "https://spacefarmers.io/api/farmers/" + this.props.farmId + "/partials"
+      global.API_URL + "/api/farmers/" + this.props.farmId + "/partials"
     );
     const json = await response.json();
     this.setState({ partials: json.data, loading: false });

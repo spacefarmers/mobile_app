@@ -32,7 +32,7 @@ export default class FarmCard extends React.Component {
 
   async getFarmGraph() {
     const response = await fetch(
-      "https://spacefarmers.io/api/graphs/farmer/points/" + this.props.farmId
+      global.API_URL + "/api/graphs/farmer/points/" + this.props.farmId
     );
     const data = await response.json();
     data.reverse();
@@ -50,23 +50,36 @@ export default class FarmCard extends React.Component {
     this.setState({ graphLoading: false });
   }
 
+  handleErrors(response) {
+    if (!response.ok) {
+        throw Error(response.statusText);
+    }
+    return response;
+  }
+
   async getFarm() {
     this.setState({ loading: true, graphLoading: true });
-    const response = await fetch(
-      "https://spacefarmers.io/api/farmers/" + this.props.farmId
-    );
-    const json = await response.json();
-    this.farm = json.data;
-    this.props.addSize((sizes) => ({
-      ...sizes,
-      [this.props.index]: this.farm.attributes.tib_24h,
-    }));
-    this.props.addPoints((points) => ({
-      ...points,
-      [this.props.index]: this.farm.attributes.points_24h,
-    }));
-    this.setState({ loading: false });
-    this.getFarmGraph();
+    fetch(global.API_URL + "/api/farmers/" + this.props.farmId)
+      .then(this.handleErrors)
+      .then(response => {
+        response.json().then(json => {
+          this.farm = json.data;
+          this.props.addSize((sizes) => ({
+            ...sizes,
+            [this.props.index]: this.farm.attributes.tib_24h,
+          }));
+          this.props.addPoints((points) => ({
+            ...points,
+            [this.props.index]: this.farm.attributes.points_24h,
+          }));
+          this.setState({ loading: false });
+          this.getFarmGraph();
+        });
+      })
+      .catch(error => {
+        alert('Error while loading farm data!')
+        this.setState({ loading: false });
+      });
   }
 
   showRemoveModal(show = false) {
@@ -113,7 +126,7 @@ export default class FarmCard extends React.Component {
               backgroundColor: "gray.50",
             }}
           >
-            {this.state.loading ? (
+            {this.state.loading || !this.farm ? (
               <Spinner flex={1} py="4" />
             ) : (
               <Box>

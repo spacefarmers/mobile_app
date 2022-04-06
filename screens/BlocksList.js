@@ -29,7 +29,7 @@ export default function BlockListScreen({ navigation }) {
 
   async function getBlocks() {
     setLoading(true);
-    let url = "https://spacefarmers.io/api/blocks/?page=" + page;
+    let url = global.API_URL + "/api/blocks/?page=" + page;
     const response = await fetch(url);
     const json = await response.json();
     setBlocks(json.data);
