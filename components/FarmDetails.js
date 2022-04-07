@@ -1,12 +1,14 @@
 import React from "react";
 import { Button, Center, ScrollView, Box, Heading, Text } from "native-base";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { getExpoToken, deleteFarmAlerts } from '../helpers/notifications'
 
 export default class FarmDetails extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       dashboardFarms: [],
+      token: undefined,
     };
   }
 
@@ -33,12 +35,15 @@ export default class FarmDetails extends React.Component {
   }
 
   async removeFromDashboard() {
+    const token = await getExpoToken();
+    this.setState({token});
     const index = this.state.dashboardFarms.indexOf(this.props.farm.id);
     var newIds = [...this.state.dashboardFarms];
     newIds.splice(index, 1);
     this.setState({ dashboardFarms: newIds });
+    if (this.state.token)
+      deleteFarmAlerts(this.state.token, this.props.farm.id)
   }
-
 
   render() {
     return (

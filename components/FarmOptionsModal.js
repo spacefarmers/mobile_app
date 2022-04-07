@@ -102,7 +102,12 @@ export default class FarmOptionsModal extends React.Component {
                   onPress={() => {
                     this.setState({loading: true});
                     if (this.state.removeFarm) {
-                      this.props.removeFarm();
+                      deleteFarmAlerts(this.state.token, this.props.farmId)
+                        .then(() => {
+                          this.props.removeFarm();
+                          this.setState({loading: false});
+                          this.props.setShowModal(false);
+                        });
                     }
                     else if (this.state.showAlerts) {
                       updateFarmAlerts(this.state.token, this.props.farmId, {
