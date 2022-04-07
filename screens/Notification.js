@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { Text, Box, HStack, Switch, Heading, Center, Button, Spinner} from 'native-base';
-import { getExpoToken, updateNotificationToken } from '../helpers/notifications'
+import { getExpoToken, updateNotificationToken, getNotification } from '../helpers/notifications'
 
 export default function NotificationsScreen() {
   const [expoPushToken, setExpoPushToken] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(true);
   const [poolBlock, setPoolBlock] = useState(false);
+  const [farmAlerts, setFarmAlerts] = useState(false);
   const [formChanged, setFormChanged] = useState(false);
 
   useEffect(() => {
@@ -23,23 +24,16 @@ export default function NotificationsScreen() {
     if (!loading) {
       setFormChanged(true);
     }
-  }, [poolBlock]);
+  }, [poolBlock, farmAlerts]);
 
   async function getToken() {
     if (expoPushToken == '')
       return;
     setLoading(true);
-    let url = global.API_URL + "/api/notifications/"+expoPushToken;
-    const response = await fetch(url);
-    const json = await response.json();
-    if (json.data == undefined) {
-      updateNotificationToken(expoPushToken, {})
-        .catch(error => setError(error.toString()))
-        .finally(() => setLoading(false));
-    } else {
-      setPoolBlock(json.data.attributes.pool_block);
-      setLoading(false);
-    }
+    const json = await getNotification(expoPushToken);
+    setPoolBlock(json.attributes.pool_block);
+    setFarmAlerts(json.attributes.farm_alerts);
+    setLoading(false);
   }
 
   return (
@@ -57,11 +51,16 @@ export default function NotificationsScreen() {
               <Switch value={poolBlock} onToggle={() => { setPoolBlock(!poolBlock) }} />
               <Text>Pool blocks</Text>
             </HStack>
+            <HStack alignItems="center" space={4}>
+              <Switch value={farmAlerts} onToggle={() => { setFarmAlerts(!farmAlerts) }} />
+              <Text>Farm alerts</Text>
+            </HStack>
             <Button
               isDisabled={!formChanged}
               onPress={() => {
                 updateNotificationToken(expoPushToken, {
                   pool_block: poolBlock,
+                  farm_alerts: farmAlerts,
                 })
                   .then(() => setFormChanged(false))
                   .catch(error => setError(error.toString()));

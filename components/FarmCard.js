@@ -16,7 +16,7 @@ export default class FarmCard extends React.Component {
     this.state = {
       loading: true,
       graphLoading: true,
-      showRemoveModal: false,
+      showOptionsModal: false,
     };
   }
 
@@ -82,29 +82,30 @@ export default class FarmCard extends React.Component {
       });
   }
 
-  showRemoveModal(show = false) {
-    this.setState({ showRemoveModal: show });
+  showOptionsModal(show = false) {
+    this.setState({ showOptionsModal: show });
   }
 
   removeFarm() {
     this.props.addSize((sizes) => ({ ...sizes, [this.props.index]: 0 }));
     this.props.addPoints((points) => ({ ...points, [this.props.index]: 0 }));
     this.props.removeFarm(this.props.index);
-    this.showRemoveModal(false);
+    this.showOptionsModal(false);
   }
 
   render() {
     return (
       <Box maxW="400" w="90%">
         <FarmOptionsModal
-          showModal={this.state.showRemoveModal}
-          setShowModal={this.showRemoveModal.bind(this)}
+          farmId={this.props.farmId}
+          showModal={this.state.showOptionsModal}
+          setShowModal={this.showOptionsModal.bind(this)}
           removeFarm={this.removeFarm.bind(this)}
         />
         <TouchableOpacity
           delayPressIn="300"
           delayLongPress="300"
-          onLongPress={() => this.showRemoveModal(true)}
+          onLongPress={() => this.showOptionsModal(true)}
           onPress={this.props.onClick}
         >
           <Box
