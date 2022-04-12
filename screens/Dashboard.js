@@ -23,7 +23,8 @@ export default function DashboardScreen({ navigation }) {
       setFarmPoints({});
       let farmsStored = await AsyncStorage.getItem("@farmIds");
       let farmArray = JSON.parse(farmsStored);
-      farmArray.forEach(addFarm);
+      if (farmArray)
+        farmArray.forEach(addFarm);
     }
 
     navigation.addListener('focus', () => {
