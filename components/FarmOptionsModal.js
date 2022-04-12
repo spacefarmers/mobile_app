@@ -10,8 +10,7 @@ const initialState = {
   showAlerts: false,
   farmTibAlert: undefined,
   farmDownAlert: undefined,
-  farmBlockAlert: undefined,
-  farmPayoutAlert: undefined,
+  farmAlertCheckboxes: []
 };
 
 export default class FarmOptionsModal extends React.Component {
@@ -29,12 +28,16 @@ export default class FarmOptionsModal extends React.Component {
     }
     const alert_data = await getFarmAlerts(token, this.props.farmId);
     if (alert_data) {
+      let checkboxes = []
+      if (alert_data.attributes.block_alert)
+        checkboxes.push('farmBlock');
+      if (alert_data.attributes.payout_alert)
+        checkboxes.push('farmPayout');
       this.setState({
         showAlerts: true,
         farmTibAlert: alert_data.attributes.size_alert && alert_data.attributes.size_alert.toString(),
         farmDownAlert: alert_data.attributes.farm_down_minutes && alert_data.attributes.farm_down_minutes.toString(),
-        farmBlockAlert: alert_data.attributes.block_alert,
-        farmPayoutAlert: alert_data.attributes.payout_alert,
+        farmAlertCheckboxes: checkboxes,
       });
     }
   }
@@ -69,14 +72,18 @@ export default class FarmOptionsModal extends React.Component {
                       </VStack>
                     </Alert>
                   }
-                  <HStack alignItems="center" space={4} >
-                    <Switch value={this.state.farmBlockAlert} onToggle={() => { this.setState({ farmBlockAlert: !this.state.farmBlockAlert })}} />
-                    <Text>Farm found block</Text>
-                  </HStack>
-                  <HStack alignItems="center" space={4} >
-                    <Switch value={this.state.farmPayoutAlert} onToggle={() => { this.setState({ farmPayoutAlert: !this.state.farmPayoutAlert })}} />
-                    <Text>Farm payout sent</Text>
-                  </HStack>
+                  <Checkbox.Group onChange={value => this.setState({farmAlertCheckboxes: value})} value={this.state.farmAlertCheckboxes}>
+                    <HStack alignItems="center" space={4} >
+                      <Checkbox value="farmBlock" mt={2}>
+                        Farm found block
+                      </Checkbox>
+                    </HStack>
+                    <HStack alignItems="center" space={4} >
+                      <Checkbox value="farmPayout" mb={2}>
+                        Farm payout sent
+                      </Checkbox>
+                    </HStack>
+                  </Checkbox.Group>
                   <Text>Alert when 24H farm size drops below:</Text>
                   <InputGroup>
                     <Input value={this.state.farmTibAlert} onChangeText={value => this.setState({farmTibAlert: value})} keyboardType="numeric" placeholder="--" />
@@ -113,8 +120,8 @@ export default class FarmOptionsModal extends React.Component {
                       updateFarmAlerts(this.state.token, this.props.farmId, {
                         size_alert: this.state.farmTibAlert,
                         farm_down_minutes: this.state.farmDownAlert,
-                        block_alert: this.state.farmBlockAlert,
-                        payout_alert: this.state.farmPayoutAlert,
+                        block_alert: this.state.farmAlertCheckboxes.includes('farmBlock'),
+                        payout_alert: this.state.farmAlertCheckboxes.includes('farmPayout'),
                       }).then(() => {
                         this.setState({loading: false});
                         this.props.setShowModal(false);
