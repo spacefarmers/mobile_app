@@ -38,14 +38,16 @@ export default function NotificationsScreen() {
 
   return (
     <Box>
+      <Box>
+        <Center>
+          <Heading>{error != '' ? 'Error!' : ''}</Heading>
+          <Text>{error}</Text>
+        </Center>
+      </Box>
       {loading ? (
         <Spinner py={10} flex={1} size="lg" />
       ) : (
         <Box>
-          <Center>
-            <Heading>{error != '' ? 'Error!' : ''}</Heading>
-            <Text>{error}</Text>
-          </Center>
           <Box mx={10}>
             <HStack alignItems="center" space={4}>
               <Switch value={poolBlock} onToggle={() => { setPoolBlock(!poolBlock) }} />
