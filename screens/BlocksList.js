@@ -66,10 +66,6 @@ export default function BlockListScreen({ navigation }) {
             renderItem={({ item }) => (
               <TouchableHighlight
                 underlayColor="rgba(6, 182, 212, 0.1)"
-                onPress={() => (
-                  // navigation.navigate("Block", { blockID: item.id })
-                  console.log("TODO")
-                )}
               >
                 <Box
                   flex={1}

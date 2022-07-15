@@ -37,7 +37,6 @@ export default function PoolStatusScreen({ navigation }) {
         return "";
       });
       setPointsChartLoading(false);
-      console.log(chart)
       return chart;
     });
   }

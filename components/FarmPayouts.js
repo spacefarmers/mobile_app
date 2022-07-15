@@ -32,7 +32,6 @@ export default class FarmPayouts extends React.Component {
       global.API_URL + "/api/farmers/" + this.props.farmId + "/payouts"
     );
     const json = await response.json();
-    console.log(json);
     this.setState({ payouts: json.data, loading: false });
   }
 
