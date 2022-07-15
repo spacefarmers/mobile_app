@@ -160,7 +160,7 @@ export default class FarmPayouts extends React.Component {
                             )}
                           />
                         </VStack>
-                        {payout.attributes.transaction_id != "" ? (
+                        {payout.attributes.transaction_id != null ? (
                           <Icon
                             mt="3"
                             as={MaterialCommunityIcons}
@@ -171,7 +171,7 @@ export default class FarmPayouts extends React.Component {
                           <Icon
                             mt="3"
                             as={MaterialCommunityIcons}
-                            name="check"
+                            name="clock-outline"
                             size="4"
                           />
                         )}
