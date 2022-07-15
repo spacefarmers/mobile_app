@@ -58,6 +58,7 @@ export default class FarmGraphs extends React.Component {
       global.API_URL + "/api/graphs/farmer/size_24h/" + this.props.farmId
     );
     const data = await response.json();
+    data.reverse();
     this.sizeChart.datasets[0].data = data.slice(-72).map((x) => x["value"]);
     this.sizeChart.labels = data.slice(-72).map((x) => {
       const date = new Date(x["timestamp"] * 1000);

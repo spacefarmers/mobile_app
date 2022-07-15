@@ -1,9 +1,10 @@
 import React from "react";
-import { Box, Text, Center, Heading, Flex, HStack, Spinner } from "native-base";
+import { Box, Text, Center, Heading, Flex, HStack, Spinner, Icon, Pressable } from "native-base";
 import { StackedBarChart } from "react-native-chart-kit";
 import { Dimensions } from "react-native";
 import { TouchableOpacity } from "react-native";
 import FarmOptionsModal from "../components/FarmOptionsModal";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 export default class FarmCard extends React.Component {
   constructor(props) {
@@ -184,12 +185,11 @@ export default class FarmCard extends React.Component {
                   >
                     {this.farm.attributes.farmer_name}
                   </Text>
-
                   <Text
                     color="gray.500"
                     position="absolute"
                     top="0"
-                    right="0"
+                    left="45%"
                     pr="3"
                     py="1.5"
                     maxW="150"
@@ -199,6 +199,31 @@ export default class FarmCard extends React.Component {
                   >
                     Points
                   </Text>
+                  <Pressable
+                    position="absolute"
+                    top="0"
+                    right="0"
+                    onPress={() => this.showOptionsModal(true)}
+                  >
+                    <Text
+                      color="gray.500"
+                      
+                      pr="3"
+                      py="1.5"
+                      maxW="150"
+                      fontWeight="700"
+                      numberOfLines={1}
+                      ellipsizeMode={"middle"}
+                    >
+                      <Icon
+                        mt="3"
+                        as={MaterialCommunityIcons}
+                        name="dots-horizontal"
+                        color="info.700"
+                        size="6"
+                      />
+                    </Text>
+                  </Pressable>
                 </Box>
                 <Flex
                   direction="row"

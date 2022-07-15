@@ -36,7 +36,9 @@ export async function getNotification(token) {
   const response = await fetch(url);
   const json = await response.json();
   if (json.data == undefined) {
-    await updateNotificationToken(expoPushToken, {});
+    await updateNotificationToken(token, {});
+    const data = await getNotification(token);
+    return data;
   } else {
     return json.data;
   }

@@ -21,12 +21,12 @@
     ],
     "ios": {
       "bundleIdentifier": "com.spacefarmers.chiapool",
-      "buildNumber": "0.0.4",
+      "buildNumber": "0.0.8",
       "supportsTablet": true
     },
     "android": {
       "package": "com.spacefarmers.chiapool",
-      "versionCode": 10,
+      "versionCode": 15,
       "permissions": [],
       "googleServicesFile": "./google-services.json",
       "adaptiveIcon": {
