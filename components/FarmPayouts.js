@@ -128,7 +128,7 @@ export default class FarmPayouts extends React.Component {
                           <Text bold>
                             {moment(
                               new Date(payout.attributes.timestamp * 1000)
-                            ).format("DD/MM/YYYY HH:mm")}
+                            ).format("DD MMM YYYY HH:mm")}
                           </Text>
                           <Text>{payout.attributes.height}</Text>
                         </VStack>

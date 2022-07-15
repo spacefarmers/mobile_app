@@ -117,7 +117,7 @@ export default class FarmBlocks extends React.Component {
                           <Text bold>
                             {moment(
                               new Date(block.attributes.timestamp * 1000)
-                            ).format("DD/MM/YYYY HH:mm")}
+                            ).format("DD MMM YYYY HH:mm")}
                           </Text>
                           <Text>{block.attributes.height}</Text>
                         </VStack>

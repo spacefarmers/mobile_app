@@ -117,7 +117,7 @@ export default class FarmPartials extends React.Component {
                           <Text bold>
                             {moment(
                               new Date(partial.attributes.timestamp * 1000)
-                            ).format("DD/MM/YYYY HH:mm:ss")}
+                            ).format("DD MMM YYYY HH:mm:ss")}
                           </Text>
                           <Text>
                             {partial.attributes.harvester_name ||

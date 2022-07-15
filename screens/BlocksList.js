@@ -89,7 +89,7 @@ export default function BlockListScreen({ navigation }) {
                       <Text numberOfLines={1}>
                         {moment(
                           new Date(item.attributes.timestamp * 1000)
-                        ).format("DD/MM/YYYY HH:mm")}
+                        ).format("DD MMM YYYY HH:mm")}
                       </Text>
                     </VStack>
                     <VStack flex={1}>
