@@ -65,7 +65,7 @@ export default function NotificationsScreen() {
                       <HStack space={2} flexShrink={1} alignItems="center">
                         <Alert.Icon />
                         <Text>
-                          At the dashboard you can configure alerts per farm
+                          You can configure alerts per farm at the dashboard
                         </Text>
                       </HStack>
                     </HStack>
