@@ -1,11 +1,10 @@
 import React from "react";
 import { Modal, Button, Center, Text, Switch, HStack, Box, InputGroup, Input, InputRightAddon, Alert, VStack, Checkbox } from "native-base";
-import { getExpoToken, getFarmAlerts, getNotification, updateFarmAlerts, deleteFarmAlerts } from '../helpers/notifications'
+import { getFarmAlerts, updateFarmAlerts, deleteFarmAlerts } from '../helpers/notifications'
 
 const initialState = {
   loading: false,
   token: undefined,
-  missingNotifications: false,
   removeFarm: false,
   showAlerts: false,
   farmTibAlert: undefined,
@@ -20,13 +19,7 @@ export default class FarmOptionsModal extends React.Component {
   }
 
   async componentDidMount() {
-    const token = await getExpoToken();
-    this.setState({token});
-    const notification_data = await getNotification(token);
-    if (!notification_data.attributes.farm_alerts) {
-      this.setState({ missingNotifications: true });
-    }
-    const alert_data = await getFarmAlerts(token, this.props.farmId);
+    const alert_data = await getFarmAlerts(this.props.expoToken, this.props.farmId);
     if (alert_data) {
       let checkboxes = []
       if (alert_data.attributes.block_alert)
@@ -39,6 +32,7 @@ export default class FarmOptionsModal extends React.Component {
         farmDownAlert: alert_data.attributes.farm_down_minutes && alert_data.attributes.farm_down_minutes.toString(),
         farmAlertCheckboxes: checkboxes,
       });
+      this.props.highlightAlert(true);
     }
   }
 
@@ -54,24 +48,11 @@ export default class FarmOptionsModal extends React.Component {
           <Modal.Body>
             <Box>
               <HStack alignItems="center" space={4} >
-                <Switch size="md" value={this.state.showAlerts} onToggle={() => { this.setState({ showAlerts: !this.state.showAlerts })}} />
+                <Switch isDisabled={this.props.expoToken == null} size="md" value={this.state.showAlerts} onToggle={() => { this.setState({ showAlerts: !this.state.showAlerts })}} />
                 <Text>Alerts</Text>
               </HStack>
               { this.state.showAlerts &&
                 <Box>
-                  { this.state.missingNotifications &&
-                    <Alert w="100%" status="warning">
-                      <VStack space={2} flexShrink={1} w="100%">
-                        <HStack flexShrink={1} space={2} justifyContent="space-between">
-                          <HStack space={2} flexShrink={1}>
-                            <Text fontSize="md" color="coolGray.800">
-                              Enable farm alerts on the notifications page to receive alerts
-                            </Text>
-                          </HStack>
-                        </HStack>
-                      </VStack>
-                    </Alert>
-                  }
                   <Checkbox.Group onChange={value => this.setState({farmAlertCheckboxes: value})} value={this.state.farmAlertCheckboxes}>
                     <HStack alignItems="center" space={4} >
                       <Checkbox value="farmBlock" mt={2}>
@@ -86,13 +67,13 @@ export default class FarmOptionsModal extends React.Component {
                   </Checkbox.Group>
                   <Text>Alert when 24H farm size drops below:</Text>
                   <InputGroup>
-                    <Input value={this.state.farmTibAlert} onChangeText={value => this.setState({farmTibAlert: value})} keyboardType="numeric" placeholder="--" />
+                    <Input w="75px" value={this.state.farmTibAlert} onChangeText={value => this.setState({farmTibAlert: value})} keyboardType="numeric" placeholder="--" />
                     <InputRightAddon children={"TiB"} />
                   </InputGroup>
-                  <Text>Alert when lost contact for:</Text>
+                  <Text>Alert when no partial for:</Text>
                   <InputGroup>
-                    <Input value={this.state.farmDownAlert} onChangeText={value => this.setState({farmDownAlert: value})} keyboardType="numeric" placeholder="--" />
-                    <InputRightAddon children={"minutes"} />
+                    <Input w="75px" value={this.state.farmDownAlert} onChangeText={value => this.setState({farmDownAlert: value})} keyboardType="numeric" placeholder="--" />
+                    <InputRightAddon children={"Minutes"} />
                   </InputGroup>
                 </Box>
               }
@@ -109,15 +90,16 @@ export default class FarmOptionsModal extends React.Component {
                   onPress={() => {
                     this.setState({loading: true});
                     if (this.state.removeFarm) {
-                      deleteFarmAlerts(this.state.token, this.props.farmId)
+                      deleteFarmAlerts(this.props.expoToken, this.props.farmId)
                         .then(() => {
                           this.props.removeFarm();
+                          this.props.highlightAlert(false);
                           this.setState({loading: false});
                           this.props.setShowModal(false);
                         });
                     }
                     else if (this.state.showAlerts) {
-                      updateFarmAlerts(this.state.token, this.props.farmId, {
+                      updateFarmAlerts(this.props.expoToken, this.props.farmId, {
                         size_alert: this.state.farmTibAlert,
                         farm_down_minutes: this.state.farmDownAlert,
                         block_alert: this.state.farmAlertCheckboxes.includes('farmBlock'),
@@ -125,11 +107,13 @@ export default class FarmOptionsModal extends React.Component {
                       }).then(() => {
                         this.setState({loading: false});
                         this.props.setShowModal(false);
+                        this.props.highlightAlert(true);
                       });
                     } else {
-                      deleteFarmAlerts(this.state.token, this.props.farmId)
+                      deleteFarmAlerts(this.props.expoToken, this.props.farmId)
                         .then(() => {
                           this.setState({loading: false});
+                          this.props.highlightAlert(false);
                           this.props.setShowModal(false);
                         });
                     }

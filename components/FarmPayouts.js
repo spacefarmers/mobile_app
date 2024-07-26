@@ -148,7 +148,7 @@ export default class FarmPayouts extends React.Component {
                           <NumberFormat
                             value={
                               (payout.attributes.amount / 10 ** 12) *
-                              payout.attributes.xch_price
+                              payout.attributes.xch_usd
                             }
                             displayType={"text"}
                             decimalScale={2}

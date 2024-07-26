@@ -9,7 +9,6 @@ import FarmersListScreen from "./screens/FarmersList";
 import FarmerScreen from "./screens/Farmer";
 import BlocksListScreen from "./screens/BlocksList";
 import PoolStatusScreen from "./screens/PoolStatus";
-import NotificationsScreen from "./screens/Notification";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import * as Notifications from 'expo-notifications';
 import {
@@ -26,7 +25,7 @@ import {
 } from "native-base";
 import {TouchableOpacity, DeviceEventEmitter} from "react-native"
 
-global.API_URL = process.env.API_URL || 'https://spacefarmers.io';
+global.API_URL = 'https://spacefarmers.io';
 
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
@@ -42,8 +41,6 @@ const getIcon = (screenName) => {
   switch (screenName) {
     case "Dashboard":
       return "view-dashboard";
-    case "Notifications":
-      return "bell";
     case "Farmers":
       return "tractor";
     case "Blocks":
@@ -55,22 +52,6 @@ const getIcon = (screenName) => {
   }
 };
 
-const getLabel = (screenName) => {
-  switch (screenName) {
-    case "Dashboard":
-      return "Personal";
-    case "Notifications":
-      return "Personal";
-    case "Farmers":
-      return "Pool";
-    case "Blocks":
-      return "Pool";
-    case "Pool status":
-      return "Pool";
-    default:
-      return undefined;
-  }
-};
 
 const menuItem = (name, props) => {
   const index = props.state.routeNames.indexOf(name);
@@ -131,7 +112,7 @@ function CustomDrawerContent(props) {
         </Center>
         <VStack>
           {menuLabel("Personal")}
-          {["Dashboard", "Notifications"].map((name) => menuItem(name, props))}
+          {["Dashboard"].map((name) => menuItem(name, props))}
           {menuLabel("Pool")}
           {["Farmers", "Blocks", "Pool status"].map((name) =>
             menuItem(name, props)
@@ -159,10 +140,6 @@ export default function App() {
           drawerContent={(props) => <CustomDrawerContent {...props} />}
         >
           <Drawer.Screen name="Dashboard" component={DashboardScreen} />
-          <Drawer.Screen
-            name="Notifications"
-            component={NotificationsScreen}
-          />
           <Drawer.Screen
             name="Farmers"
             component={FarmersListScreen}

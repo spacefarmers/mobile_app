@@ -18,6 +18,7 @@ export default class FarmCard extends React.Component {
       loading: true,
       graphLoading: true,
       showOptionsModal: false,
+      highlightAlert: false,
     };
   }
 
@@ -77,14 +78,17 @@ export default class FarmCard extends React.Component {
           this.getFarmGraph();
         });
       })
-      .catch(error => {
-        alert('Error while loading farm data!')
+      .catch(() => {
         this.setState({ loading: false });
       });
   }
 
   showOptionsModal(show = false) {
     this.setState({ showOptionsModal: show });
+  }
+
+  highlightAlert(hasAlert = false) {
+    this.setState({ highlightAlert: hasAlert });
   }
 
   removeFarm() {
@@ -102,6 +106,8 @@ export default class FarmCard extends React.Component {
           showModal={this.state.showOptionsModal}
           setShowModal={this.showOptionsModal.bind(this)}
           removeFarm={this.removeFarm.bind(this)}
+          highlightAlert={this.highlightAlert.bind(this)}
+          expoToken={this.props.expoToken}
         />
         <TouchableOpacity
           delayPressIn="300"
@@ -218,9 +224,9 @@ export default class FarmCard extends React.Component {
                       <Icon
                         mt="3"
                         as={MaterialCommunityIcons}
-                        name="dots-horizontal"
-                        color="info.700"
-                        size="6"
+                        name="bell-alert"
+                        color={ this.state.highlightAlert ? "info.700" : "gray.500" }
+                        size="5"
                       />
                     </Text>
                   </Pressable>

@@ -9,8 +9,11 @@ import {
 } from "native-base";
 import FarmCard from "../components/FarmCard";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { getExpoToken } from '../helpers/notifications'
 
 export default function DashboardScreen({ navigation }) {
+  const [error, setError] = useState(null);
+  const [expoToken, setExpoToken] = useState(null);
   const [farmSizes, setFarmSize] = useState({});
   const [farmPoints, setFarmPoints] = useState({});
   const [lastRefresh, setLastRefresh] = useState(0);
@@ -23,8 +26,10 @@ export default function DashboardScreen({ navigation }) {
       setFarmPoints({});
       let farmsStored = await AsyncStorage.getItem("@farmIds");
       let farmArray = JSON.parse(farmsStored);
-      if (farmArray)
+      if (farmArray.length > 0) {
+        await loadExpoToken();
         farmArray.forEach(addFarm);
+      }
     }
 
     navigation.addListener('focus', () => {
@@ -46,6 +51,17 @@ export default function DashboardScreen({ navigation }) {
     return self.indexOf(value) === index;
   };
 
+  const loadExpoToken = async () => {
+    try {
+      const token = await getExpoToken();
+      setError(null);
+      setExpoToken(token);
+    } catch (error) {
+      setExpoToken(null);
+      setError(error.toString());
+    }
+  };
+
   const addFarm = async (id) => {
     setFarmIds((ids) => ids.concat(id).filter(unique));
   };
@@ -64,7 +80,7 @@ export default function DashboardScreen({ navigation }) {
 
   return (
     <Box>
-      <Center pt="4" mb="4">
+      <Center pt="4" mb="1">
         <Box
           w="90%"
           maxW="400"
@@ -133,9 +149,39 @@ export default function DashboardScreen({ navigation }) {
           </Flex>
         </Box>
       </Center>
+      { error != null && farmIds.length > 0 ? (
+        <Center>
+          <Box
+            pt="4"
+            w="90%"
+            maxW="400"
+            rounded="lg"
+            overflow="hidden"
+            borderColor="coolGray.200"
+            borderWidth="1"
+            style={{ backgroundColor: "#F2C14E", margin: 20 }}
+            _dark={{
+              borderColor: "coolGray.600",
+              backgroundColor: "gray.700",
+            }}
+            _web={{
+              shadow: 2,
+              borderWidth: 0,
+            }}
+            _light={{
+              backgroundColor: "gray.50",
+            }}>
+            <Center>
+              <Heading size="sm">Heads up!</Heading>
+              <Text p="3">{error}</Text>
+            </Center>
+          </Box>
+        </Center>
+      ) : ( <Box mb="4"></Box> ) }
       { farmIds.length == 0 ? (
         <Center>
           <Box
+            pt="4"
             w="90%"
             maxW="400"
             rounded="lg"
@@ -154,7 +200,10 @@ export default function DashboardScreen({ navigation }) {
               backgroundColor: "gray.50",
             }}
           >
-            <Text p="3" textAlign='center'>Lookup your farm in the farmers list to add it to the dashboard</Text>
+            <Center>
+              <Heading size="sm">Personal farms</Heading>
+              <Text p="3" textAlign='center'>Find your farm in the farmers list to add it to this dashboard.</Text>
+            </Center>
           </Box>
         </Center>
       ) : (
@@ -173,6 +222,7 @@ export default function DashboardScreen({ navigation }) {
                 addPoints={setFarmPoints}
                 removeFarm={removeFarm}
                 lastRefresh={lastRefresh}
+                expoToken={expoToken}
                 onClick={() => navigation.navigate('Farmer', { farmId: item })}
               />
             </Center>
