@@ -21,13 +21,13 @@
     ],
     "ios": {
       "bundleIdentifier": "com.spacefarmers.chiapool",
-      "buildNumber": "0.0.8",
+      "buildNumber": "0.0.9",
       "supportsTablet": true
     },
     "android": {
       "package": "com.spacefarmers.chiapool",
-      "versionCode": 15,
-      "permissions": [],
+      "versionCode": 17,
+      "permissions": ["android.permission.RECEIVE_BOOT_COMPLETED", "android.permission.SCHEDULE_EXACT_ALARM"],
       "googleServicesFile": "./google-services.json",
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
@@ -36,6 +36,11 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "0e9318fe-986e-41a6-a5b8-dbf7d16ff8de"
+      }
     }
   }
 }
